@@ -1,0 +1,2 @@
+.\" $FreeBSD: head/tools/build/options/WITHOUT_DMAGENT 262335 2014-02-22 13:05:23Z bapt $
+Set to not build dma Mail Transport Agent

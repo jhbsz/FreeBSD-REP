@@ -1,0 +1,10 @@
+#	From: @(#)Makefile	8.1 (Berkeley) 6/6/93
+# $FreeBSD: head/usr.bin/talk/Makefile 263264 2014-03-17 11:58:48Z glebius $
+
+PROG=	talk
+SRCS=	ctl.c ctl_transact.c display.c get_addrs.c get_iface.c get_names.c \
+	init_disp.c invite.c io.c look_up.c msgs.c talk.c
+DPADD=	${LIBCURSESW}
+LDADD=	-lcursesw
+
+.include <bsd.prog.mk>

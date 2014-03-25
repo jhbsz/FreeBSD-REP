@@ -1,0 +1,7 @@
+# $FreeBSD: head/sys/boot/Makefile.amd64 263117 2014-03-13 19:26:23Z emaste $
+
+SUBDIR+=		efi
+SUBDIR+=		ficl64
+SUBDIR+=		libstand32
+SUBDIR+=		zfs
+SUBDIR+=		userboot

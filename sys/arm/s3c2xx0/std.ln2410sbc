@@ -1,0 +1,10 @@
+#$FreeBSD: head/sys/arm/s3c2xx0/std.ln2410sbc 261227 2014-01-28 09:12:04Z andrew $
+include "../s3c2xx0/std.s3c2410"
+
+makeoptions	KERNPHYSADDR=0x30000000
+makeoptions	KERNVIRTADDR=0xc0000000
+options		KERNPHYSADDR=0x30000000	
+options		KERNVIRTADDR=0xc0000000
+options		PHYSADDR=0x30000000
+options		NO_EVENTTIMERS
+

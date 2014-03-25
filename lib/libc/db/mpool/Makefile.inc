@@ -1,0 +1,6 @@
+#	from @(#)Makefile.inc	8.1 (Berkeley) 6/4/93
+# $FreeBSD: head/lib/libc/db/mpool/Makefile.inc 262722 2014-03-04 02:19:39Z marcel $
+
+.PATH: ${LIBC_SRCTOP}/db/mpool
+
+SRCS+=	mpool.c mpool-compat.c

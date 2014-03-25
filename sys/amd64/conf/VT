@@ -1,0 +1,14 @@
+# VT -- kernel config using the vt(9) system console instead of legacy syscons
+#                                                                              
+# For more information see https://wiki.freebsd.org/Newcons
+#
+# $FreeBSD: head/sys/amd64/conf/VT 260888 2014-01-19 18:46:38Z emaste $
+
+include		GENERIC
+ident		VT
+
+nodevice	sc
+nodevice	vga
+
+device		vt
+device		vt_vga

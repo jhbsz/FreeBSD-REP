@@ -1,0 +1,9 @@
+/* $FreeBSD: head/lib/clang/include/llvm/Config/AsmParsers.def 262613 2014-02-28 18:06:00Z dim $ */
+
+LLVM_ASM_PARSER(ARM)
+LLVM_ASM_PARSER(Mips)
+LLVM_ASM_PARSER(PowerPC)
+LLVM_ASM_PARSER(Sparc)
+LLVM_ASM_PARSER(X86)
+
+#undef LLVM_ASM_PARSER

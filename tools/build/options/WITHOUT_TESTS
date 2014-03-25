@@ -1,0 +1,2 @@
+.\" $FreeBSD: head/tools/build/options/WITHOUT_TESTS 257098 2013-10-25 05:27:36Z rpaulo $
+Set to not build any test programs nor install them in /usr/tests.

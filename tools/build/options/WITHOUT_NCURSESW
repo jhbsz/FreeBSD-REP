@@ -1,0 +1,4 @@
+.\" $FreeBSD: head/tools/build/options/WITHOUT_NCURSESW 261300 2014-01-30 21:41:25Z brooks $
+Set to not build or depend on the
+.Nm libncursesw
+library.

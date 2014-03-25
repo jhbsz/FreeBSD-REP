@@ -1,0 +1,17 @@
+# $FreeBSD: head/lib/libz/Versions.def 257462 2013-10-31 18:44:40Z emaste $
+
+ZLIB_1.2.4.0 {
+};
+
+ZLIB_1.2.7.0 {
+} ZLIB_1.2.4.0;
+
+ZLIB_1.2.7.1 {
+} ZLIB_1.2.7.0;
+
+FBSD_1.2 {
+} ZLIB_1.2.4.0;
+
+ZLIBprivate_1.0 {
+} ZLIB_1.2.4.0;
+

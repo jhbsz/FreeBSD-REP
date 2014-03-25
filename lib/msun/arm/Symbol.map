@@ -1,0 +1,21 @@
+/*
+ * $FreeBSD: head/lib/msun/arm/Symbol.map 263210 2014-03-15 21:58:07Z andrew $
+ */
+FBSD_1.0 {
+};
+
+FBSD_1.3 {
+	feclearexcept;
+	fegetexceptflag;
+	fesetexceptflag;
+	feraiseexcept;
+	fetestexcept;
+	fegetround;
+	fesetround;
+	fegetenv;
+	feholdexcept;
+	feupdateenv;
+	feenableexcept;
+	fedisableexcept;
+	fegetexcept;
+};

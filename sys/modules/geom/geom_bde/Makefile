@@ -1,0 +1,11 @@
+# $FreeBSD: head/sys/modules/geom/geom_bde/Makefile 263219 2014-03-16 01:55:30Z jmg $
+
+.PATH: ${.CURDIR}/../../../geom/bde
+.PATH: ${.CURDIR}/../../../crypto/rijndael
+.PATH: ${.CURDIR}/../../../crypto/sha2
+
+KMOD=	geom_bde
+SRCS=	g_bde.c g_bde_crypt.c g_bde_lock.c g_bde_work.c
+SRCS+=	rijndael-alg-fst.c rijndael-api-fst.c sha2.c sha256c.c
+
+.include <bsd.kmod.mk>
