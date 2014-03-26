@@ -34,8 +34,6 @@
 #define	REPITYPE_STATUS	1	/* REPI status message */
 #define	REPITYPE_TIME	2	/* Time counter packet */
 
-/* TODO: Usar a API counter(9) para as estatisticas */
-
 /* Number of input repi datagrams */
 static counter_u64_t repi_input_dgrams_count = NULL;
 
@@ -44,6 +42,13 @@ static counter_u64_t repi_output_dgrams_count = NULL;
 
 /* Number of forwarded datagrams */
 static counter_u64_t repi_forwarded_dgrams_count = NULL;
+
+/* Generate random MAC address */
+static int repi_random_mac_address = 0;
+
+/* Enable/Disable packets forwarding */
+static int repi_packets_forwarding_disabled = 0;
+
 
 struct repi_user_message {
 	char 	chat_text[55];	/* Text message from the messaging application */

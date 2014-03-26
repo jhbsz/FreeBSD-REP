@@ -233,6 +233,16 @@ ether_output(struct ifnet *ifp, struct mbuf *m,
 		type = htons(ETHERTYPE_IPV6);
 		break;
 #endif
+#ifdef REPI
+	case AF_REPI:
+		loop_copy = 0; /* if this is for us, don't do it */
+		hdrcmplt = 1;
+		eh = (struct ether_header *)dst->sa_data;
+		(void)memcpy(edst, eh->ether_dhost, sizeof (edst));
+		(void)memcpy(esrc, eh->ether_shost, sizeof (esrc));
+		type = eh->ether_type;
+		break;
+#endif
 	case pseudo_AF_HDRCMPLT:
 	    {
 		const struct ether_header *eh;

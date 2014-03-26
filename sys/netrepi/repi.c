@@ -30,6 +30,7 @@ __FBSDID("$FreeBSD:$");
 
 #include <sys/param.h>
 #include <sys/kernel.h>
+#include <sys/libkern.h>
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 #include <sys/systm.h>
@@ -39,6 +40,7 @@ __FBSDID("$FreeBSD:$");
 
 #include <net/if.h>
 #include <net/if_var.h>
+#include <net/if_dl.h>
 #include <net/ethernet.h>
 #include <net/netisr.h>
 
@@ -83,33 +85,54 @@ static int sysctl_repi_forwarded_dgrams_count_handler(SYSCTL_HANDLER_ARGS) {
 }
 
 SYSCTL_NODE(_net, OID_AUTO, repi, CTLFLAG_RD, 0, "REPI Protocol");
+
 SYSCTL_NODE(_net_repi, OID_AUTO, stats, CTLFLAG_RD, 0, "REPI Statistics");
-SYSCTL_PROC(_net_repi, OID_AUTO, input_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
+SYSCTL_PROC(_net_repi_stats, OID_AUTO, input_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
 		sysctl_repi_input_dgrams_count_handler, "LU", "Number of input packets");
-SYSCTL_PROC(_net_repi, OID_AUTO, output_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
+SYSCTL_PROC(_net_repi_stats, OID_AUTO, output_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
 		sysctl_repi_output_dgrams_count_handler, "LU", "Number of output packets");
-SYSCTL_PROC(_net_repi, OID_AUTO, forwarded_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
+SYSCTL_PROC(_net_repi_stats, OID_AUTO, forwarded_packets, CTLTYPE_ULONG|CTLFLAG_RD, NULL, 0,
 		sysctl_repi_forwarded_dgrams_count_handler, "LU", "Number of forwarded packets");
+
+SYSCTL_NODE(_net_repi, OID_AUTO, control, CTLFLAG_RD, 0, "REPI Control");
+SYSCTL_INT(_net_repi_control, OID_AUTO, random_mac_address, CTLFLAG_RW, &repi_random_mac_address, 0,
+		"Generate random MAC address for packets");
+SYSCTL_INT(_net_repi_control, OID_AUTO, disable_forwarding, CTLFLAG_RW, &repi_packets_forwarding_disabled, 0,
+		"Disable packets forwarding");
+
+static void
+repi_randomize_mac_address(u_char *mac) {
+
+	int i;
+
+	for(i = 0; i < ETHER_ADDR_LEN; i++)
+		mac[i] = arc4random() % 256;
+
+}
 
 static int
 repi_output(struct ifnet *ifp, struct mbuf *m) {
 
-	static float c = 1;
-
 	struct sockaddr addr;
+	struct ether_header *eh;
 
-	addr.sa_family = AF_UNSPEC;
+	addr.sa_family = AF_REPI;
 	addr.sa_len = m->m_hdr.mh_len;
 
-	struct ether_header *eh = (struct ether_header *) &addr.sa_data;
-	
-	eh->ether_type = 0xf0ff;
-	memcpy(eh->ether_dhost, "\xff\xff\xff\xff\xff\xff", ETHER_ADDR_LEN);
+	eh = (struct ether_header *) &addr.sa_data;
+	eh->ether_type = htons(ETHERTYPE_REPI);
+	memcpy(eh->ether_dhost, ifp->if_broadcastaddr, ETHER_ADDR_LEN);
 
-	c *= 0.3;
+	/* Randomize MAC address? */
+	if(repi_random_mac_address)
+		repi_randomize_mac_address(eh->ether_shost);
+	else
+		memcpy(eh->ether_shost, IF_LLADDR(ifp), ETHER_ADDR_LEN);
 
+	/* Update statistics */
 	counter_u64_add(repi_output_dgrams_count, 1);
 
+	/* Fly packet, fly! */
 	return((*ifp->if_output)(ifp, m, &addr, NULL));
 
 }
@@ -119,15 +142,13 @@ static void
 repi_input_internal(struct mbuf *m) {
 
 	struct repi_user_message repi_umsg;
-
 	struct ifnet *ifp = m->m_pkthdr.rcvif;
+	u_short repi_type;
 
 	printf("Packet input...\n");
 	printf("Size: %d\n", m->m_hdr.mh_len);
 
-	u_short repi_type;
 	memcpy(&repi_type, m->m_hdr.mh_data, 2);
-
 	memcpy(&repi_umsg, m->m_hdr.mh_data + 2, m->m_hdr.mh_len);
 
 	printf("REPI type: %d\n", repi_type);
@@ -138,7 +159,7 @@ repi_input_internal(struct mbuf *m) {
 		repi_umsg.chat_id[9] = '\0';
 		repi_umsg.custom_int[7] = '\0';
 		repi_umsg.prefix[31] = '\0';
-
+		/*
 		printf("message: %s\n", repi_umsg.chat_text);
 		printf("chat id: %s\n", repi_umsg.chat_id);
 		printf("custom int: %s\n", repi_umsg.custom_int);
@@ -159,13 +180,22 @@ repi_input_internal(struct mbuf *m) {
 		printf("HTL: %d\n", repi_umsg.htl); 
 		printf("seqno: %d\n", repi_umsg.seqno); 
 		printf("prefix: %s\n", repi_umsg.prefix); 
-
+*/
 	}
 
-	repi_output(ifp, m);
+	/* Reply the packet to the other machines? */
+	if(!repi_packets_forwarding_disabled) {
+		/* Update statistics */
+		counter_u64_add(repi_forwarded_dgrams_count, 1);
+
+		/* TODO: Implementar as restricoes para o forwarding */
+
+		repi_output(ifp, m);
+	}
 
 	m_free(m);
 
+	/* Update statistics */
 	counter_u64_add(repi_input_dgrams_count, 1);
 
 }
@@ -217,3 +247,4 @@ repi_uninit(void) {
 
 SYSINIT(repi_init, SI_SUB_PROTO_DOMAIN, SI_ORDER_ANY, repi_init, NULL);
 SYSUNINIT(repi_uninit, SI_SUB_PROTO_DOMAIN, SI_ORDER_ANY, repi_uninit, NULL);
+
