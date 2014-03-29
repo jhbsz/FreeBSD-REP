@@ -39,6 +39,9 @@ __FBSDID("$FreeBSD: head/sys/net/bpf_filter.c 224044 2011-07-14 21:06:22Z mp $")
 
 #include <sys/param.h>
 
+#if !defined(_KERNEL)
+#include <strings.h>
+#endif
 #if !defined(_KERNEL) || defined(sun)
 #include <netinet/in.h>
 #endif

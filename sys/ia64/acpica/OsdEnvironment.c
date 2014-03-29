@@ -29,8 +29,8 @@
 __FBSDID("$FreeBSD: head/sys/ia64/acpica/OsdEnvironment.c 217265 2011-01-11 13:59:06Z jhb $");
 
 #include <sys/types.h>
+#include <sys/efi.h>
 #include <sys/sysctl.h>
-#include <machine/efi.h>
 
 #include <contrib/dev/acpica/include/acpi.h>
 

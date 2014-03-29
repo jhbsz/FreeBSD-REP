@@ -49,6 +49,11 @@ static int repi_random_mac_address = 0;
 /* Enable/Disable packets forwarding */
 static int repi_packets_forwarding_disabled = 0;
 
+static int repi_hash_size = 4096;
+static int repi_hash_seed = 0;
+
+/* Hash used to identify a packet already forwarded */
+int *repi_hash = NULL;
 
 struct repi_user_message {
 	char 	chat_text[55];	/* Text message from the messaging application */
@@ -73,6 +78,22 @@ struct repi_time_message {
 	u_int	time_left;
 	u_int	time_arrive;
 	u_char	hops;
+};
+
+
+typedef	uint32_t	prefix_addr_t;
+
+struct repi_header {
+	uint8_t			version:4,		/* Protocol version */
+					hide_flag:1,	/* Hide the interest */
+					crypto:1,		/* Interest and data is encrypted? */
+					other_flags:2;	/* Don't used yet */
+	uint8_t			ttl;			/* Time to live (hop counter) */
+	uint16_t		hlen;			/* Header Length */
+	uint32_t		seq_number;		/* Sequence number */
+	prefix_addr_t	prefix_dst;		/* Destination prefix */
+	prefix_addr_t	prefix_src;		/* Source prefix */
+	uint64_t		timestamp;		/* Timestamp when the packet was sent */
 };
 
 #endif /* !_NETREPI_REPI_H_ */

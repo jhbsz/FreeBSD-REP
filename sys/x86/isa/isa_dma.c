@@ -61,7 +61,7 @@ __FBSDID("$FreeBSD: head/sys/x86/isa/isa_dma.c 233675 2012-03-29 18:58:02Z jhb $
 #include <isa/isavar.h>
 #include <isa/isa_dmareg.h>
 
-#define	ISARAM_END	RAM_END
+#define	ISARAM_END	0x1000000
 
 static int isa_dmarangecheck(caddr_t va, u_int length, int chan);
 

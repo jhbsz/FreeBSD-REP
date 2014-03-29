@@ -101,6 +101,7 @@ __FBSDID("$FreeBSD: head/sys/arm/arm/machdep.c 262952 2014-03-09 18:08:27Z ian $
 #include <machine/reg.h>
 #include <machine/trap.h>
 #include <machine/undefined.h>
+#include <machine/vfp.h>
 #include <machine/vmparam.h>
 #include <machine/sysarch.h>
 
@@ -366,8 +367,8 @@ cpu_startup(void *dummy)
 	    (uintmax_t)arm32_ptob(realmem),
 	    (uintmax_t)arm32_ptob(realmem) / mbyte);
 	printf("avail memory = %ju (%ju MB)\n",
-	    (uintmax_t)arm32_ptob(cnt.v_free_count),
-	    (uintmax_t)arm32_ptob(cnt.v_free_count) / mbyte);
+	    (uintmax_t)arm32_ptob(vm_cnt.v_free_count),
+	    (uintmax_t)arm32_ptob(vm_cnt.v_free_count) / mbyte);
 	if (bootverbose) {
 		arm_physmem_print_tables();
 		arm_devmap_print_table();
@@ -990,6 +991,7 @@ init_proc0(vm_offset_t kstack)
 		(thread0.td_kstack + KSTACK_PAGES * PAGE_SIZE) - 1;
 	thread0.td_pcb->pcb_flags = 0;
 	thread0.td_pcb->pcb_vfpcpu = -1;
+	thread0.td_pcb->pcb_vfpstate.fpscr = VFPSCR_DN | VFPSCR_FZ;
 	thread0.td_frame = &proc0_tf;
 	pcpup->pc_curpcb = thread0.td_pcb;
 }

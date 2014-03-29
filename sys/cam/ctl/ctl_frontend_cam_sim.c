@@ -65,7 +65,6 @@ __FBSDID("$FreeBSD: head/sys/cam/ctl/ctl_frontend_cam_sim.c 256843 2013-10-21 12
 #include <cam/ctl/ctl.h>
 #include <cam/ctl/ctl_frontend.h>
 #include <cam/ctl/ctl_frontend_internal.h>
-#include <cam/ctl/ctl_mem_pool.h>
 #include <cam/ctl/ctl_debug.h>
 
 #define	io_ptr		spriv_ptr1

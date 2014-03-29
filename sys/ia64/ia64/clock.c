@@ -30,6 +30,7 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/clock.c 263248 2014-03-16 20:21:40Z marce
 #include <sys/param.h>
 #include <sys/kernel.h>
 #include <sys/bus.h>
+#include <sys/efi.h>
 #include <sys/interrupt.h>
 #include <sys/priority.h>
 #include <sys/proc.h>
@@ -41,7 +42,6 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/clock.c 263248 2014-03-16 20:21:40Z marce
 #include <sys/pcpu.h>
 
 #include <machine/cpu.h>
-#include <machine/efi.h>
 #include <machine/intr.h>
 #include <machine/intrcnt.h>
 #include <machine/md_var.h>

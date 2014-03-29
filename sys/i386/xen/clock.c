@@ -76,7 +76,7 @@ __FBSDID("$FreeBSD: head/sys/i386/xen/clock.c 263008 2014-03-11 10:20:42Z royger
 #include <machine/timerreg.h>
 
 #include <x86/isa/icu.h>
-#include <x86/isa/isa.h>
+#include <isa/isareg.h>
 #include <isa/rtc.h>
 
 #include <vm/vm.h>

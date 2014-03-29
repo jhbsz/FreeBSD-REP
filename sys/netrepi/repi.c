@@ -37,6 +37,7 @@ __FBSDID("$FreeBSD:$");
 #include <sys/mbuf.h>
 #include <sys/types.h>
 #include <sys/counter.h>
+#include <sys/hash.h>
 
 #include <net/if.h>
 #include <net/if_var.h>
@@ -99,6 +100,8 @@ SYSCTL_INT(_net_repi_control, OID_AUTO, random_mac_address, CTLFLAG_RW, &repi_ra
 		"Generate random MAC address for packets");
 SYSCTL_INT(_net_repi_control, OID_AUTO, disable_forwarding, CTLFLAG_RW, &repi_packets_forwarding_disabled, 0,
 		"Disable packets forwarding");
+SYSCTL_INT(_net_repi_control, OID_AUTO, hash_size, CTLFLAG_RDTUN, &repi_hash_size, 0,
+		"Packet identifier hash size");
 
 static void
 repi_randomize_mac_address(u_char *mac) {
@@ -141,47 +144,25 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 static void
 repi_input_internal(struct mbuf *m) {
 
-	struct repi_user_message repi_umsg;
+	struct repi_header *repi_hdr;
 	struct ifnet *ifp = m->m_pkthdr.rcvif;
-	u_short repi_type;
+
+	uint32_t hash;
 
 	printf("Packet input...\n");
 	printf("Size: %d\n", m->m_hdr.mh_len);
 
-	memcpy(&repi_type, m->m_hdr.mh_data, 2);
-	memcpy(&repi_umsg, m->m_hdr.mh_data + 2, m->m_hdr.mh_len);
+	repi_hdr = (struct repi_header *) m->m_hdr.mh_data;
 
-	printf("REPI type: %d\n", repi_type);
+	printf("Version: %d\n", repi_hdr->version);
+	printf("Flags: %x%x%x\n", repi_hdr->hide_flag, repi_hdr->crypto, repi_hdr->other_flags);
+	printf("TTL: %d\n", repi_hdr->ttl);
+	printf("hlen: %d\n", repi_hdr->hlen);
+	printf("seqnumber: %d\n", repi_hdr->seq_number);
+	printf("dst prefix: %x\n", repi_hdr->prefix_dst);
+	printf("src prefix: %x\n", repi_hdr->prefix_src);
+	printf("timestamp: %lu\n", repi_hdr->timestamp);
 
-	if(repi_type == REPITYPE_MSG) {
-
-		repi_umsg.chat_text[54] = '\0';
-		repi_umsg.chat_id[9] = '\0';
-		repi_umsg.custom_int[7] = '\0';
-		repi_umsg.prefix[31] = '\0';
-		/*
-		printf("message: %s\n", repi_umsg.chat_text);
-		printf("chat id: %s\n", repi_umsg.chat_id);
-		printf("custom int: %s\n", repi_umsg.custom_int);
-		printf("source: %x%x%x%x%x%x\n", 
-				repi_umsg.source[0],
-				repi_umsg.source[1],
-				repi_umsg.source[2],
-				repi_umsg.source[3],
-				repi_umsg.source[4],
-				repi_umsg.source[5]);
-		printf("last hop: %x%x%x%x%x%x\n", 
-				repi_umsg.last_hop[0],
-				repi_umsg.last_hop[1],
-				repi_umsg.last_hop[2],
-				repi_umsg.last_hop[3],
-				repi_umsg.last_hop[4],
-				repi_umsg.last_hop[5]);
-		printf("HTL: %d\n", repi_umsg.htl); 
-		printf("seqno: %d\n", repi_umsg.seqno); 
-		printf("prefix: %s\n", repi_umsg.prefix); 
-*/
-	}
 
 	/* Reply the packet to the other machines? */
 	if(!repi_packets_forwarding_disabled) {
@@ -190,8 +171,29 @@ repi_input_internal(struct mbuf *m) {
 
 		/* TODO: Implementar as restricoes para o forwarding */
 
+		/* Decrement TTL */
+		repi_hdr->ttl--;
+
+		/* If the packet TTL reach zero, don't send to network */
+		if(repi_hdr->ttl == 0) goto zero_ttl;
+
+		hash = jenkins_hash32(&(repi_hdr->seq_number), sizeof(repi_hdr->seq_number), repi_hash_seed);
+
+		/* If the packet already passed over here, don't send to network again */
+		if(repi_hash[hash % repi_hash_size] != -1) goto packet_already_forwarded;
+
+		/* TODO: Implementar uma maneira de remover os numeros de sequencia do hash apos algum tempo.
+		 *	talvez atraves de uma fila circular com um tamanho razoavel
+		 * */
+
+		/* Add the packet to hash table */
+		repi_hash[hash % repi_hash_size] = repi_hdr->seq_number;
+
 		repi_output(ifp, m);
 	}
+
+zero_ttl:
+packet_already_forwarded:
 
 	m_free(m);
 
@@ -217,6 +219,9 @@ static struct netisr_handler repi_nh = {
 
 };
 
+MALLOC_DECLARE(M_REPI_HASH);
+MALLOC_DEFINE(M_REPI_HASH, "repi_hash", "memory used by repi protocol in a hash table");
+
 static void
 repi_init(__unused void *args) {
 
@@ -230,6 +235,10 @@ repi_init(__unused void *args) {
 	counter_u64_zero(repi_output_dgrams_count);
 	counter_u64_zero(repi_forwarded_dgrams_count);
 
+	repi_hash = malloc(sizeof(int) * repi_hash_size, M_REPI_HASH, M_WAITOK);
+	memset(repi_hash, -1, sizeof(int) * repi_hash_size);
+	repi_hash_seed = arc4random();
+
 	netisr_register(&repi_nh);
 
 }
@@ -240,6 +249,8 @@ repi_uninit(void) {
 	counter_u64_free(repi_input_dgrams_count);
 	counter_u64_free(repi_output_dgrams_count);
 	counter_u64_free(repi_forwarded_dgrams_count);
+
+	free(repi_hash, M_REPI_HASH);
 
 	netisr_unregister(&repi_nh);
 

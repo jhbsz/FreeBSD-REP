@@ -79,7 +79,7 @@ __FBSDID("$FreeBSD: head/sys/x86/x86/nexus.c 260912 2014-01-20 17:55:22Z jhb $")
 #ifdef PC98
 #include <pc98/cbus/cbus.h>
 #else
-#include <x86/isa/isa.h>
+#include <isa/isareg.h>
 #endif
 #endif
 #include <sys/rtprio.h>

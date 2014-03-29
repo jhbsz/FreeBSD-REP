@@ -1,6 +1,8 @@
 #	$NetBSD: Makefile,v 1.1 2002/03/01 11:21:58 ad Exp $
 # $FreeBSD: head/bin/pkill/Makefile 202532 2010-01-17 21:56:27Z ed $
 
+.include <bsd.own.mk>
+
 PROG=	pkill
 
 DPADD=	${LIBKVM}
@@ -16,5 +18,9 @@ MLINKS=	pkill.1 pgrep.1
 #
 SYMLINKS=	${BINDIR}/pkill /usr/bin/pkill
 SYMLINKS+=	${BINDIR}/pgrep /usr/bin/pgrep
+
+.if ${MK_TESTS} != "no"
+SUBDIR+= tests
+.endif
 
 .include <bsd.prog.mk>

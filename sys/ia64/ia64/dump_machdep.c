@@ -33,6 +33,7 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/dump_machdep.c 260009 2013-12-28 19:54:19
 #include <sys/systm.h>
 #include <sys/conf.h>
 #include <sys/cons.h>
+#include <sys/efi.h>
 #include <sys/kernel.h>
 #include <sys/kerneldump.h>
 #ifdef SW_WATCHDOG
@@ -41,7 +42,6 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/dump_machdep.c 260009 2013-12-28 19:54:19
 #include <vm/vm.h>
 #include <vm/pmap.h>
 #include <machine/bootinfo.h>
-#include <machine/efi.h>
 #include <machine/elf.h>
 #include <machine/md_var.h>
 

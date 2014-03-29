@@ -1,4 +1,5 @@
 /* $OpenBSD: auth.c,v 1.103 2013/05/19 02:42:42 djm Exp $ */
+/* $FreeBSD: head/crypto/openssh/auth.c 255767 2013-09-21 21:36:09Z des $ */
 /*
  * Copyright (c) 2000 Markus Friedl.  All rights reserved.
  *

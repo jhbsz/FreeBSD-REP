@@ -29,9 +29,9 @@
 __FBSDID("$FreeBSD: head/sys/ia64/ia64/efi.c 224112 2011-07-16 19:56:07Z marcel $");
 
 #include <sys/param.h>
+#include <sys/efi.h>
 #include <sys/systm.h>
 #include <machine/bootinfo.h>
-#include <machine/efi.h>
 #include <machine/md_var.h>
 #include <machine/sal.h>
 #include <vm/vm.h>

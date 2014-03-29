@@ -25,6 +25,7 @@
  */
 
 #include "includes.h"
+__RCSID("$FreeBSD: head/crypto/openssh/compat.c 261320 2014-01-31 13:12:02Z des $");
 
 #include <sys/types.h>
 

@@ -102,7 +102,7 @@ __FBSDID("$FreeBSD: head/sbin/devd/devd.cc 262914 2014-03-07 23:30:48Z asomers $
 
 #define PIPE "/var/run/devd.pipe"
 #define CF "/etc/devd.conf"
-#define SYSCTL "hw.bus.devctl_disable"
+#define SYSCTL "hw.bus.devctl_queue"
 
 /*
  * Since the client socket is nonblocking, we must increase its send buffer to
@@ -1164,9 +1164,9 @@ check_devd_enabled()
 	len = sizeof(val);
 	if (sysctlbyname(SYSCTL, &val, &len, NULL, 0) != 0)
 		errx(1, "devctl sysctl missing from kernel!");
-	if (val) {
-		warnx("Setting " SYSCTL " to 0");
-		val = 0;
+	if (val == 0) {
+		warnx("Setting " SYSCTL " to 1000");
+		val = 1000;
 		sysctlbyname(SYSCTL, NULL, NULL, &val, sizeof(val));
 	}
 }

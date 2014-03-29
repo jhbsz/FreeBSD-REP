@@ -54,7 +54,7 @@ __FBSDID("$FreeBSD: head/sys/x86/isa/atpic.c 261520 2014-02-05 18:13:27Z jhb $")
 #ifdef PC98
 #include <pc98/cbus/cbus.h>
 #else
-#include <x86/isa/isa.h>
+#include <isa/isareg.h>
 #endif
 #include <isa/isavar.h>
 

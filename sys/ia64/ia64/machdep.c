@@ -42,6 +42,7 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/machdep.c 263323 2014-03-18 23:51:34Z mar
 #include <sys/bus.h>
 #include <sys/cons.h>
 #include <sys/cpu.h>
+#include <sys/efi.h>
 #include <sys/eventhandler.h>
 #include <sys/exec.h>
 #include <sys/imgact.h>
@@ -83,7 +84,6 @@ __FBSDID("$FreeBSD: head/sys/ia64/ia64/machdep.c 263323 2014-03-18 23:51:34Z mar
 
 #include <machine/bootinfo.h>
 #include <machine/cpu.h>
-#include <machine/efi.h>
 #include <machine/elf.h>
 #include <machine/fpu.h>
 #include <machine/intr.h>
@@ -133,6 +133,7 @@ SYSCTL_UINT(_hw_freq, OID_AUTO, itc, CTLFLAG_RD, &itc_freq, 0,
     "ITC frequency");
 
 int cold = 1;
+int unmapped_buf_allowed = 0;
 
 struct bootinfo *bootinfo;
 
@@ -280,8 +281,8 @@ cpu_startup(void *dummy)
 
 	vm_ksubmap_init(&kmi);
 
-	printf("avail memory = %ld (%ld MB)\n", ptoa(cnt.v_free_count),
-	    ptoa(cnt.v_free_count) / 1048576);
+	printf("avail memory = %ld (%ld MB)\n", ptoa(vm_cnt.v_free_count),
+	    ptoa(vm_cnt.v_free_count) / 1048576);
  
 	if (fpswa_iface == NULL)
 		printf("Warning: no FPSWA package supplied\n");
@@ -746,8 +747,8 @@ ia64_init(void)
 		mdlen = md->md_pages * EFI_PAGE_SIZE;
 		switch (md->md_type) {
 		case EFI_MD_TYPE_IOPORT:
-			ia64_port_base = (uintptr_t)pmap_mapdev(md->md_phys,
-			    mdlen);
+			ia64_port_base = pmap_mapdev_priv(md->md_phys,
+			    mdlen, VM_MEMATTR_UNCACHEABLE);
 			break;
 		case EFI_MD_TYPE_PALCODE:
 			ia64_pal_base = md->md_phys;
