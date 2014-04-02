@@ -33,6 +33,7 @@
 #include "opt_compat.h"
 #include "opt_inet6.h"
 #include "opt_inet.h"
+#include "opt_repi.h"
 
 #include <sys/param.h>
 #include <sys/types.h>
@@ -92,6 +93,10 @@
 #ifdef COMPAT_FREEBSD32
 #include <sys/mount.h>
 #include <compat/freebsd32/freebsd32.h>
+#endif
+
+#ifdef REPI
+#include <netrepi/repi.h>
 #endif
 
 struct ifindex_entry {
@@ -2500,7 +2505,6 @@ ifhwioctl(u_long cmd, struct ifnet *ifp, caddr_t data, struct thread *td)
 			return (error);
 		break;
 	}
-
 	default:
 		error = ENOIOCTL;
 		break;
@@ -2591,6 +2595,31 @@ ifioctl(struct socket *so, u_long cmd, caddr_t data, struct thread *td)
 		error = if_getgroupmembers((struct ifgroupreq *)data);
 		CURVNET_RESTORE();
 		return (error);
+#ifdef REPI
+	case SIOCSREPIPREFIX:
+		{
+			struct ifreq *ifr = (struct ifreq *) data;
+			struct ifnet *ifp = ifunit_ref(ifr->ifr_name);
+
+			if (ifp == NULL)
+				return (ENXIO);
+
+			ifp->if_repi_prefix = ifr->ifr_repi;
+			return(0);
+		}
+	case SIOCGREPIPREFIX:
+		{
+			struct repi_addr *repi_addr = (struct repi_addr *) data;
+			struct ifnet *ifp = ifunit_ref(repi_addr->ifreq.ifr_name);
+
+			if (ifp == NULL)
+				return (ENXIO);
+
+			repi_addr->ifreq.ifr_repi = ifp->if_repi_prefix;
+			error = copyout(&(repi_addr->ifreq.ifr_repi), repi_addr->prefix_buf, sizeof(prefix_addr_t));
+			return error;
+		}
+#endif
 #if defined(INET) || defined(INET6)
 	case SIOCSVH:
 	case SIOCGVH:

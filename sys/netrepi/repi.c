@@ -45,7 +45,15 @@ __FBSDID("$FreeBSD:$");
 #include <net/ethernet.h>
 #include <net/netisr.h>
 
+
 #include <netrepi/repi.h>
+
+/* Hash used to identify a packet already forwarded */
+static int *repi_hash = NULL;
+
+/* Statistics */
+
+struct repi_stats repi_stats;
 
 /* sysctls functions handlers */
 
@@ -54,7 +62,7 @@ static int sysctl_repi_input_dgrams_count_handler(SYSCTL_HANDLER_ARGS) {
 	int error;
 	uint64_t val;
 
-	val = counter_u64_fetch(repi_input_dgrams_count);
+	val = counter_u64_fetch(repi_stats.repi_input_dgrams_count);
 	error = SYSCTL_OUT(req, &val, sizeof(val));
 
 	return error;
@@ -66,7 +74,7 @@ static int sysctl_repi_output_dgrams_count_handler(SYSCTL_HANDLER_ARGS) {
 	int error;
 	uint64_t val;
 
-	val = counter_u64_fetch(repi_output_dgrams_count);
+	val = counter_u64_fetch(repi_stats.repi_output_dgrams_count);
 	error = SYSCTL_OUT(req, &val, sizeof(val));
 
 	return error;
@@ -78,7 +86,7 @@ static int sysctl_repi_forwarded_dgrams_count_handler(SYSCTL_HANDLER_ARGS) {
 	int error;
 	uint64_t val;
 
-	val = counter_u64_fetch(repi_forwarded_dgrams_count);
+	val = counter_u64_fetch(repi_stats.repi_forwarded_dgrams_count);
 	error = SYSCTL_OUT(req, &val, sizeof(val));
 
 	return error;
@@ -133,7 +141,7 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 		memcpy(eh->ether_shost, IF_LLADDR(ifp), ETHER_ADDR_LEN);
 
 	/* Update statistics */
-	counter_u64_add(repi_output_dgrams_count, 1);
+	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
 
 	/* Fly packet, fly! */
 	return((*ifp->if_output)(ifp, m, &addr, NULL));
@@ -166,9 +174,6 @@ repi_input_internal(struct mbuf *m) {
 
 	/* Reply the packet to the other machines? */
 	if(!repi_packets_forwarding_disabled) {
-		/* Update statistics */
-		counter_u64_add(repi_forwarded_dgrams_count, 1);
-
 		/* TODO: Implementar as restricoes para o forwarding */
 
 		/* Decrement TTL */
@@ -189,6 +194,9 @@ repi_input_internal(struct mbuf *m) {
 		/* Add the packet to hash table */
 		repi_hash[hash % repi_hash_size] = repi_hdr->seq_number;
 
+		/* Update statistics */
+		counter_u64_add(repi_stats.repi_forwarded_dgrams_count, 1);
+
 		repi_output(ifp, m);
 	}
 
@@ -198,7 +206,7 @@ packet_already_forwarded:
 	m_free(m);
 
 	/* Update statistics */
-	counter_u64_add(repi_input_dgrams_count, 1);
+	counter_u64_add(repi_stats.repi_input_dgrams_count, 1);
 
 }
 
@@ -227,13 +235,19 @@ repi_init(__unused void *args) {
 
 	printf("REPI Initializing...\n");
 
-	repi_input_dgrams_count = counter_u64_alloc(M_WAITOK);
-	repi_output_dgrams_count = counter_u64_alloc(M_WAITOK);
-	repi_forwarded_dgrams_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_input_dgrams_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_output_dgrams_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_forwarded_dgrams_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_input_bytes_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_output_bytes_count = counter_u64_alloc(M_WAITOK);
+	repi_stats.repi_forwarded_bytes_count = counter_u64_alloc(M_WAITOK);
 
-	counter_u64_zero(repi_input_dgrams_count);
-	counter_u64_zero(repi_output_dgrams_count);
-	counter_u64_zero(repi_forwarded_dgrams_count);
+	counter_u64_zero(repi_stats.repi_input_dgrams_count);
+	counter_u64_zero(repi_stats.repi_output_dgrams_count);
+	counter_u64_zero(repi_stats.repi_forwarded_dgrams_count);
+	counter_u64_zero(repi_stats.repi_input_bytes_count);
+	counter_u64_zero(repi_stats.repi_output_bytes_count);
+	counter_u64_zero(repi_stats.repi_forwarded_bytes_count);
 
 	repi_hash = malloc(sizeof(int) * repi_hash_size, M_REPI_HASH, M_WAITOK);
 	memset(repi_hash, -1, sizeof(int) * repi_hash_size);
@@ -246,9 +260,12 @@ repi_init(__unused void *args) {
 static void
 repi_uninit(void) {
 
-	counter_u64_free(repi_input_dgrams_count);
-	counter_u64_free(repi_output_dgrams_count);
-	counter_u64_free(repi_forwarded_dgrams_count);
+	counter_u64_free(repi_stats.repi_input_dgrams_count);
+	counter_u64_free(repi_stats.repi_output_dgrams_count);
+	counter_u64_free(repi_stats.repi_forwarded_dgrams_count);
+	counter_u64_free(repi_stats.repi_input_bytes_count);
+	counter_u64_free(repi_stats.repi_output_bytes_count);
+	counter_u64_free(repi_stats.repi_forwarded_bytes_count);
 
 	free(repi_hash, M_REPI_HASH);
 

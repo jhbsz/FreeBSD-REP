@@ -79,6 +79,8 @@ struct	vnet;
 #include <sys/sx.h>		/* XXX */
 #include <sys/_task.h>		/* if_link_task */
 
+#include <netrepi/types.h>
+
 #define	IF_DUNIT_NONE	-1
 
 #include <altq/if_altq.h>
@@ -117,6 +119,8 @@ struct ifnet {
 	short	if_index_reserved;	/* spare space to grow if_index */
 	char	if_xname[IFNAMSIZ];	/* external name (name + unit) */
 	char	*if_description;	/* interface description */
+
+	prefix_addr_t	if_repi_prefix;
 
 	/* Variable fields that are touched by the stack and drivers. */
 	int	if_flags;		/* up/down, broadcast, etc. */

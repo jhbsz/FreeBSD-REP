@@ -74,6 +74,9 @@ static const char rcsid[] =
 #include <string.h>
 #include <unistd.h>
 
+#include <netrepi/repi.h>
+#include <math.h>
+
 #include "ifconfig.h"
 
 /*
@@ -372,9 +375,10 @@ af_getbyname(const char *name)
 {
 	struct afswtch *afp;
 
-	for (afp = afs; afp !=  NULL; afp = afp->af_next)
+	for (afp = afs; afp !=  NULL; afp = afp->af_next) {
 		if (strcmp(afp->af_name, name) == 0)
 			return afp;
+	}
 	return NULL;
 }
 
@@ -722,6 +726,84 @@ setifrvnet(const char *jname, int dummy __unused, int s,
 }
 #endif
 
+/* Normal random variable generator */
+static float
+rand_gauss(float m, float s) { /* mean m, standard deviation s */
+	float x1, x2, w, y1;
+	static float y2;
+	static int use_last = 0;
+
+	if (use_last) { /* use value from previous call */
+		y1 = y2;
+		use_last = 0;
+	} else {
+		do {
+			x1 = 2.0 * (arc4random()/(float)RAND_MAX) - 1.0;
+			x2 = 2.0 * (arc4random()/(float)RAND_MAX) - 1.0;
+			w = x1 * x1 + x2 * x2;
+		} while ( w >= 1.0 );
+		w = sqrt((-2.0 * log(w))/w);
+		y1 = x1 * w;
+		y2 = x2 * w;
+		use_last = 1;
+	}
+
+	return (m + y1*s);
+}
+
+/* Randomize prefix C */
+static void
+repi_random_prefix(prefix_addr_t *address) {
+	uint32_t i;
+	uint32_t auxVal;
+
+	double possibilities = pow(REPI_FIELD_LENGTH, 2);
+	double mean = possibilities / 2;
+	double variance = possibilities / 2;
+
+	*address = 0;
+
+	for(i = 0; i < REPI_PREFIX_LENGTH; i++) {
+		auxVal = (int)trunc(rand_gauss(mean, variance));
+		*address |= (auxVal & REPI_MASK_FIELD(8 * sizeof(*address), 
+			REPI_PREFIX_LENGTH, 0, REPI_FIELD_LENGTH)) << (i * (8 * sizeof(*address) / REPI_PREFIX_LENGTH));
+	}
+}
+
+static void
+setprefix(const char *val, int dummy __unused, int s,
+	const struct afswtch *afp){
+
+	struct ifreq ifreq = ifr;
+	int error;
+
+	/* TODO: O resultado desta funcao nao parece correto */
+	repi_random_prefix(&(ifreq.ifr_repi));
+
+	error = ioctl(s, SIOCSREPIPREFIX, &ifreq);
+
+	if(error < 0)
+		err(1, "SIOCSREPIPREFIX(%s)", ifr.ifr_name);
+
+}
+
+static void
+unsetprefix(const char *val, int dummy __unused, int s,
+	const struct afswtch *afp){
+
+	struct ifreq ifreq = ifr;
+	int error;
+
+	ifreq.ifr_repi = 0x0;
+
+	error = ioctl(s, SIOCSREPIPREFIX, &ifreq);
+
+	if(error < 0)
+		err(1, "SIOCSREPIPREFIX(%s)", ifr.ifr_name);
+
+}
+
+
 static void
 setifnetmask(const char *addr, int dummy __unused, int s,
     const struct afswtch *afp)
@@ -985,6 +1067,7 @@ status(const struct afswtch *afp, const struct sockaddr_dl *sdl,
 		} else if (afp->af_af == ift->ifa_addr->sa_family)
 			afp->af_status(s, ift);
 	}
+
 #if 0
 	if (allfamilies || afp->af_af == AF_LINK) {
 		const struct afswtch *lafp;
@@ -1136,6 +1219,7 @@ ifmaybeload(const char *name)
 	kldload(ifkind);
 }
 
+
 static struct cmd basic_cmds[] = {
 	DEF_CMD("up",		IFF_UP,		setifflags),
 	DEF_CMD("down",		-IFF_UP,	setifflags),
@@ -1154,6 +1238,8 @@ static struct cmd basic_cmds[] = {
 	DEF_CMD("-alias",	-IFF_UP,	notealias),
 	DEF_CMD("delete",	-IFF_UP,	notealias),
 	DEF_CMD("remove",	-IFF_UP,	notealias),
+	DEF_CMD("setprefix",	IFF_UP,		setprefix),
+	DEF_CMD("unsetprefix",	IFF_UP,		unsetprefix),
 #ifdef notdef
 #define	EN_SWABIPS	0x1000
 	DEF_CMD("swabips",	EN_SWABIPS,	setifflags),

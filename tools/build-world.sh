@@ -1,3 +1,3 @@
 #!/usr/local/bin/bash
 
-make -j8 buildworld
+make -DREPI -DNO_CLEAN -j8 buildworld

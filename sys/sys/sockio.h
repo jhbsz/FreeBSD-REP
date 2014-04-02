@@ -128,4 +128,7 @@
 #define	SIOCDIFGROUP	 _IOW('i', 137, struct ifgroupreq) /* delete ifgroup */
 #define	SIOCGIFGMEMB	_IOWR('i', 138, struct ifgroupreq) /* get members */
 
+#define	SIOCSREPIPREFIX	_IOW('i', 139, struct ifreq)	/* Set REPI prefix */
+#define	SIOCGREPIPREFIX	_IOW('i', 140, struct ifreq)	/* Get REPI prefix */
+
 #endif /* !_SYS_SOCKIO_H_ */

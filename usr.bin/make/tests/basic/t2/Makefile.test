@@ -1,0 +1,6 @@
+# $FreeBSD:  263346 2014-03-19 12:29:20Z jmmv $
+#
+# Just a target and a command. No command line targets.
+#
+all:
+	echo hello

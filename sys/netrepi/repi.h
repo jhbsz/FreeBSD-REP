@@ -28,20 +28,23 @@
 #ifndef _NETREPI_REPI_H_
 #define _NETREPI_REPI_H_
 
+#ifdef _KERNEL
+
 /* Message types */
 
 #define REPITYPE_MSG	0	/* REPI message */
 #define	REPITYPE_STATUS	1	/* REPI status message */
 #define	REPITYPE_TIME	2	/* Time counter packet */
 
-/* Number of input repi datagrams */
-static counter_u64_t repi_input_dgrams_count = NULL;
+struct repi_stats {
+	counter_u64_t repi_input_dgrams_count;		/* Number of input repi datagrams */
+	counter_u64_t repi_output_dgrams_count;		/* Number of output repi datagrams */
+	counter_u64_t repi_forwarded_dgrams_count;	/* Number of forwarded datagrams */
+	counter_u64_t repi_input_bytes_count;		/* Total #bytes received */
+	counter_u64_t repi_output_bytes_count;		/* Total #bytes sent */
+	counter_u64_t repi_forwarded_bytes_count;	/* Total #bytes forwarded */
+};
 
-/* Number of output repi datagrams */
-static counter_u64_t repi_output_dgrams_count = NULL;
-
-/* Number of forwarded datagrams */
-static counter_u64_t repi_forwarded_dgrams_count = NULL;
 
 /* Generate random MAC address */
 static int repi_random_mac_address = 0;
@@ -52,8 +55,12 @@ static int repi_packets_forwarding_disabled = 0;
 static int repi_hash_size = 4096;
 static int repi_hash_seed = 0;
 
-/* Hash used to identify a packet already forwarded */
-int *repi_hash = NULL;
+#endif // _KERNEL
+
+#define REPI_PREFIX_LENGTH	8 /* In fields */
+#define REPI_FIELD_LENGTH	3 /* In bits */
+#define REPI_MASK_FIELD(size, nField, field, length) \
+	(((1 << length) - 1) << (field * (size / nField)))
 
 struct repi_user_message {
 	char 	chat_text[55];	/* Text message from the messaging application */
@@ -81,8 +88,6 @@ struct repi_time_message {
 };
 
 
-typedef	uint32_t	prefix_addr_t;
-
 struct repi_header {
 	uint8_t			version:4,		/* Protocol version */
 					hide_flag:1,	/* Hide the interest */
@@ -94,6 +99,11 @@ struct repi_header {
 	prefix_addr_t	prefix_dst;		/* Destination prefix */
 	prefix_addr_t	prefix_src;		/* Source prefix */
 	uint64_t		timestamp;		/* Timestamp when the packet was sent */
+};
+
+struct repi_addr {
+	prefix_addr_t *prefix_buf;
+	struct ifreq ifreq;
 };
 
 #endif /* !_NETREPI_REPI_H_ */
