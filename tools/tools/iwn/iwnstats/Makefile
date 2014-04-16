@@ -1,6 +1,6 @@
 # $FreeBSD: head/tools/tools/iwn/iwnstats/Makefile 262423 2014-02-24 02:38:43Z adrian $
 
-NO_MAN=1
+MAN=
 
 .include <bsd.own.mk>
 

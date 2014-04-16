@@ -1,7 +1,7 @@
 # $FreeBSD: head/kerberos5/libexec/digest-service/Makefile 255455 2013-09-10 18:40:43Z des $
 
 PROG=	digest-service
-NO_MAN=	1
+MAN=
 CFLAGS+=	-I${KRB5DIR}/kdc \
 		-I${KRB5DIR}/lib/asn1 \
 		-I${KRB5DIR}/lib/krb5 \

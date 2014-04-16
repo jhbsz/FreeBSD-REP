@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/clang/macho-dump/Makefile 246705 2013-02-12 05:56:00Z andrew $
 
-NO_MAN=
+MAN=
 .include <bsd.own.mk>
 
 PROG_CXX=macho-dump

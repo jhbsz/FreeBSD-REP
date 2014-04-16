@@ -1,7 +1,7 @@
 # $FreeBSD: head/tools/test/iconv/posix/Makefile 219019 2011-02-25 00:04:39Z gabor $
 
 PROG=	posix
-NO_MAN=	yes
+MAN=
 
 WARNS?=	6
 

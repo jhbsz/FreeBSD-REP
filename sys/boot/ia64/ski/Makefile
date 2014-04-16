@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/ia64/ski/Makefile 211680 2010-08-23 01:50:34Z imp $
 
-NO_MAN=
+MAN=
 
 .include <bsd.own.mk>
 MK_SSP=		no

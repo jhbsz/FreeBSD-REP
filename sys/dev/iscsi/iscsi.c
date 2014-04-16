@@ -66,6 +66,10 @@
 #include <sys/socketvar.h>
 #endif
 
+#ifdef ICL_KERNEL_PROXY
+FEATURE(iscsi_kernel_proxy, "iSCSI initiator built with ICL_KERNEL_PROXY");
+#endif
+
 /*
  * XXX: This is global so the iscsi_unload() can access it.
  * 	Think about how to do this properly.
@@ -75,24 +79,24 @@ static struct iscsi_softc	*sc;
 SYSCTL_NODE(_kern, OID_AUTO, iscsi, CTLFLAG_RD, 0, "iSCSI initiator");
 static int debug = 1;
 TUNABLE_INT("kern.iscsi.debug", &debug);
-SYSCTL_INT(_kern_iscsi, OID_AUTO, debug, CTLFLAG_RW,
-    &debug, 2, "Enable debug messages");
+SYSCTL_INT(_kern_iscsi, OID_AUTO, debug, CTLFLAG_RWTUN,
+    &debug, 0, "Enable debug messages");
 static int ping_timeout = 5;
 TUNABLE_INT("kern.iscsi.ping_timeout", &ping_timeout);
-SYSCTL_INT(_kern_iscsi, OID_AUTO, ping_timeout, CTLFLAG_RW, &ping_timeout,
-    5, "Timeout for ping (NOP-Out) requests, in seconds");
+SYSCTL_INT(_kern_iscsi, OID_AUTO, ping_timeout, CTLFLAG_RWTUN, &ping_timeout,
+    0, "Timeout for ping (NOP-Out) requests, in seconds");
 static int iscsid_timeout = 60;
 TUNABLE_INT("kern.iscsi.iscsid_timeout", &iscsid_timeout);
-SYSCTL_INT(_kern_iscsi, OID_AUTO, iscsid_timeout, CTLFLAG_RW, &iscsid_timeout,
-    60, "Time to wait for iscsid(8) to handle reconnection, in seconds");
+SYSCTL_INT(_kern_iscsi, OID_AUTO, iscsid_timeout, CTLFLAG_RWTUN, &iscsid_timeout,
+    0, "Time to wait for iscsid(8) to handle reconnection, in seconds");
 static int login_timeout = 60;
 TUNABLE_INT("kern.iscsi.login_timeout", &login_timeout);
-SYSCTL_INT(_kern_iscsi, OID_AUTO, login_timeout, CTLFLAG_RW, &login_timeout,
-    60, "Time to wait for iscsid(8) to finish Login Phase, in seconds");
+SYSCTL_INT(_kern_iscsi, OID_AUTO, login_timeout, CTLFLAG_RWTUN, &login_timeout,
+    0, "Time to wait for iscsid(8) to finish Login Phase, in seconds");
 static int maxtags = 255;
 TUNABLE_INT("kern.iscsi.maxtags", &maxtags);
-SYSCTL_INT(_kern_iscsi, OID_AUTO, maxtags, CTLFLAG_RW, &maxtags,
-    255, "Max number of IO requests queued");
+SYSCTL_INT(_kern_iscsi, OID_AUTO, maxtags, CTLFLAG_RWTUN, &maxtags,
+    0, "Max number of IO requests queued");
 
 static MALLOC_DEFINE(M_ISCSI, "iSCSI", "iSCSI initiator");
 static uma_zone_t iscsi_outstanding_zone;
@@ -217,12 +221,12 @@ iscsi_session_send_postponed(struct iscsi_session *is)
 
 	ISCSI_SESSION_LOCK_ASSERT(is);
 
-	while (!TAILQ_EMPTY(&is->is_postponed)) {
-		request = TAILQ_FIRST(&is->is_postponed);
+	while (!STAILQ_EMPTY(&is->is_postponed)) {
+		request = STAILQ_FIRST(&is->is_postponed);
 		postpone = iscsi_pdu_prepare(request);
 		if (postpone)
 			break;
-		TAILQ_REMOVE(&is->is_postponed, request, ip_next);
+		STAILQ_REMOVE_HEAD(&is->is_postponed, ip_next);
 		icl_pdu_queue(request);
 	}
 }
@@ -238,7 +242,7 @@ iscsi_pdu_queue_locked(struct icl_pdu *request)
 	iscsi_session_send_postponed(is);
 	postpone = iscsi_pdu_prepare(request);
 	if (postpone) {
-		TAILQ_INSERT_TAIL(&is->is_postponed, request, ip_next);
+		STAILQ_INSERT_TAIL(&is->is_postponed, request, ip_next);
 		return;
 	}
 	icl_pdu_queue(request);
@@ -326,9 +330,9 @@ iscsi_maintenance_thread_reconnect(struct iscsi_session *is)
 	/*
 	 * Remove postponed PDUs.
 	 */
-	while (!TAILQ_EMPTY(&is->is_postponed)) {
-		pdu = TAILQ_FIRST(&is->is_postponed);
-		TAILQ_REMOVE(&is->is_postponed, pdu, ip_next);
+	while (!STAILQ_EMPTY(&is->is_postponed)) {
+		pdu = STAILQ_FIRST(&is->is_postponed);
+		STAILQ_REMOVE_HEAD(&is->is_postponed, ip_next);
 		icl_pdu_free(pdu);
 	}
 
@@ -340,7 +344,7 @@ iscsi_maintenance_thread_reconnect(struct iscsi_session *is)
 
 	KASSERT(TAILQ_EMPTY(&is->is_outstanding),
 	    ("destroying session with active tasks"));
-	KASSERT(TAILQ_EMPTY(&is->is_postponed),
+	KASSERT(STAILQ_EMPTY(&is->is_postponed),
 	    ("destroying session with postponed PDUs"));
 
 	/*
@@ -395,9 +399,9 @@ iscsi_maintenance_thread_terminate(struct iscsi_session *is)
 	/*
 	 * Remove postponed PDUs.
 	 */
-	while (!TAILQ_EMPTY(&is->is_postponed)) {
-		pdu = TAILQ_FIRST(&is->is_postponed);
-		TAILQ_REMOVE(&is->is_postponed, pdu, ip_next);
+	while (!STAILQ_EMPTY(&is->is_postponed)) {
+		pdu = STAILQ_FIRST(&is->is_postponed);
+		STAILQ_REMOVE_HEAD(&is->is_postponed, ip_next);
 		icl_pdu_free(pdu);
 	}
 
@@ -427,7 +431,7 @@ iscsi_maintenance_thread_terminate(struct iscsi_session *is)
 
 	KASSERT(TAILQ_EMPTY(&is->is_outstanding),
 	    ("destroying session with active tasks"));
-	KASSERT(TAILQ_EMPTY(&is->is_postponed),
+	KASSERT(STAILQ_EMPTY(&is->is_postponed),
 	    ("destroying session with postponed PDUs"));
 
 	ISCSI_SESSION_UNLOCK(is);
@@ -458,7 +462,7 @@ iscsi_maintenance_thread(void *arg)
 		ISCSI_SESSION_LOCK(is);
 		if (is->is_reconnecting == false &&
 		    is->is_terminating == false &&
-		    TAILQ_EMPTY(&is->is_postponed))
+		    STAILQ_EMPTY(&is->is_postponed))
 			cv_wait(&is->is_maintenance_cv, &is->is_lock);
 
 		if (is->is_reconnecting) {
@@ -636,7 +640,7 @@ iscsi_pdu_update_statsn(const struct icl_pdu *response)
 			 * Command window increased; kick the maintanance thread
 			 * to send out postponed commands.
 			 */
-			if (!TAILQ_EMPTY(&is->is_postponed))
+			if (!STAILQ_EMPTY(&is->is_postponed))
 				cv_signal(&is->is_maintenance_cv);
 		} else if (maxcmdsn < is->is_maxcmdsn) {
 			ISCSI_SESSION_DEBUG(is, "PDU MaxCmdSN %d < session MaxCmdSN %d; ignoring",
@@ -1641,12 +1645,12 @@ iscsi_ioctl_session_add(struct iscsi_softc *sc, struct iscsi_session_add *isa)
 		return (EBUSY);
 	}
 
-	is->is_conn = icl_conn_new();
+	is->is_conn = icl_conn_new("iscsi", &is->is_lock);
 	is->is_conn->ic_receive = iscsi_receive_callback;
 	is->is_conn->ic_error = iscsi_error_callback;
 	is->is_conn->ic_prv0 = is;
 	TAILQ_INIT(&is->is_outstanding);
-	TAILQ_INIT(&is->is_postponed);
+	STAILQ_INIT(&is->is_postponed);
 	mtx_init(&is->is_lock, "iscsi_lock", NULL, MTX_DEF);
 	cv_init(&is->is_maintenance_cv, "iscsi_mt");
 #ifdef ICL_KERNEL_PROXY

@@ -1,7 +1,7 @@
 # $FreeBSD: head/usr.sbin/ctm/mkCTM/Makefile 140941 2005-01-28 16:08:11Z ru $
 
 PROG=	mkctm
-NO_MAN=
+MAN=
 
 DPADD=	${LIBMD}
 LDADD=	-lmd

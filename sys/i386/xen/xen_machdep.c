@@ -64,6 +64,7 @@ __FBSDID("$FreeBSD: head/sys/i386/xen/xen_machdep.c 263005 2014-03-11 10:13:06Z 
 
 
 #include <xen/hypervisor.h>
+#include <xen/xenstore/xenstorevar.h>
 #include <machine/xen/xenvar.h>
 #include <machine/xen/xenfunc.h>
 #include <machine/xen/xenpmap.h>
@@ -709,9 +710,6 @@ char *bootmem_start, *bootmem_current, *bootmem_end;
 
 pteinfo_t *pteinfo_list;
 void initvalues(start_info_t *startinfo);
-
-struct xenstore_domain_interface;
-extern struct xenstore_domain_interface *xen_store;
 
 void *
 bootmem_alloc(unsigned int size) 

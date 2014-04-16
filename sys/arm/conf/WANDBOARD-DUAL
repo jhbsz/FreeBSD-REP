@@ -17,7 +17,7 @@
 #
 # $FreeBSD: head/sys/arm/conf/WANDBOARD-DUAL 257604 2013-11-04 03:46:09Z ian $
 
-include  	"WANDBOARD.common"
+include  	"IMX6"
 ident		WANDBOARD-DUAL
 
 # Flattened Device Tree

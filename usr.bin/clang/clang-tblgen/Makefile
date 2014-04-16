@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/clang/clang-tblgen/Makefile 261991 2014-02-16 19:44:07Z dim $
 
-NO_MAN=
+MAN=
 .include <bsd.own.mk>
 
 PROG_CXX=clang-tblgen

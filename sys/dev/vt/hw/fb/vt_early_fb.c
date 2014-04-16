@@ -44,6 +44,7 @@ __FBSDID("$FreeBSD: head/sys/dev/vt/hw/fb/vt_early_fb.c 257726 2013-11-05 23:09:
 #include <dev/ofw/ofw_bus.h>
 #include <dev/ofw/ofw_bus_subr.h>
 #include <dev/ofw/ofw_pci.h>
+#include <machine/fdt.h>
 #endif
 
 #include <dev/vt/vt.h>

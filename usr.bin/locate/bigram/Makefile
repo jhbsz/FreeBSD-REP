@@ -2,7 +2,7 @@
 # $FreeBSD: head/usr.bin/locate/bigram/Makefile 139103 2004-12-21 08:47:35Z ru $
 
 PROG=	locate.bigram
-NO_MAN=
+MAN=
 BINDIR=	${LIBEXECDIR}
 CFLAGS+= -I${.CURDIR}/../locate
 

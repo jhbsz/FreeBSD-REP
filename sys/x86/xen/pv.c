@@ -57,6 +57,7 @@ __FBSDID("$FreeBSD: head/sys/x86/xen/pv.c 263014 2014-03-11 10:27:57Z royger $")
 
 #include <xen/xen-os.h>
 #include <xen/hypervisor.h>
+#include <xen/xenstore/xenstorevar.h>
 
 #include <xen/interface/vcpu.h>
 

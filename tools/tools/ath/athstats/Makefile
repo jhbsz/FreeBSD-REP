@@ -1,6 +1,6 @@
 # $FreeBSD: head/tools/tools/ath/athstats/Makefile 262829 2014-03-06 07:47:19Z adrian $
 
-NO_MAN=1
+MAN=
 
 .include <bsd.own.mk>
 

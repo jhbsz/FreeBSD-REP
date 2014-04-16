@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/ntp/ntp-keygen/Makefile 182008 2008-08-22 16:00:48Z roberto $
 
-NO_MAN=
+MAN=
 
 .include <bsd.own.mk>
 

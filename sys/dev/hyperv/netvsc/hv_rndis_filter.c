@@ -26,6 +26,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD: head/sys/dev/hyperv/netvsc/hv_rndis_filter.c 250199 2013-05-03 02:03:36Z grehan $");
+
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
@@ -334,7 +337,7 @@ hv_rf_on_receive(struct hv_device *device, netvsc_packet *pkt)
 		return (EINVAL);
 
 	/* Shift virtual page number to form virtual page address */
-	rndis_hdr = (rndis_msg *)(pkt->page_buffers[0].pfn << PAGE_SHIFT);
+	rndis_hdr = (rndis_msg *)(uintptr_t)(pkt->page_buffers[0].pfn << PAGE_SHIFT);
 
 	rndis_hdr = (void *)((unsigned long)rndis_hdr
 			+ pkt->page_buffers[0].offset);

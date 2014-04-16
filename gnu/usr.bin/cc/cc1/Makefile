@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/cc/cc1/Makefile 245539 2013-01-17 05:56:28Z andrew $
 
-NO_MAN=
+MAN=
 .include <bsd.own.mk>
 
 .include "../Makefile.inc"

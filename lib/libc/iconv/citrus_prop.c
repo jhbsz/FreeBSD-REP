@@ -1,5 +1,5 @@
 /* $FreeBSD: head/lib/libc/iconv/citrus_prop.c 262441 2014-02-24 13:33:20Z tijl $ */
-/* $NetBSD: citrus_prop.c,v 1.3 2006/11/22 23:47:21 tnozaki Exp $ */
+/* $NetBSD: citrus_prop.c,v 1.4 2011/03/30 08:22:01 jruoho Exp $ */
 
 /*-
  * Copyright (c)2006 Citrus Project,

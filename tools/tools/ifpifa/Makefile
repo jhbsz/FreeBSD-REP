@@ -1,7 +1,7 @@
 # $FreeBSD: head/tools/tools/ifpifa/Makefile 236644 2012-06-05 21:35:47Z emax $
 
 PROG=	ifpifa
-NO_MAN=
+MAN=
 WARNS?=6
 BINDIR?=/usr/local/bin
 DPADD=${LIBKVM}

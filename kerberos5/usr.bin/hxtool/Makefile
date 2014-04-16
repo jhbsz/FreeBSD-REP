@@ -1,7 +1,7 @@
 # $FreeBSD: head/kerberos5/usr.bin/hxtool/Makefile 236422 2012-06-01 21:26:28Z obrien $
 
 PROG=	hxtool
-NO_MAN=	1
+MAN=
 CFLAGS+=	-I${KRB5DIR}/lib/hx509 \
 		-I${KRB5DIR}/lib/asn1 \
 		-I${KRB5DIR}/lib/roken \

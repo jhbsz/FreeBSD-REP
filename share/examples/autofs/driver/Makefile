@@ -2,7 +2,7 @@
 # $FreeBSD: head/share/examples/autofs/driver/Makefile 204585 2010-03-02 16:58:04Z uqs $
 
 PROG=		autodriver
-NO_MAN=
+MAN=
 
 SRCS=		autodriver.c
 WARNS?=		4

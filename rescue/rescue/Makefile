@@ -1,7 +1,7 @@
 #$FreeBSD: head/rescue/rescue/Makefile 263140 2014-03-14 02:58:48Z glebius $
 #	@(#)Makefile	8.1 (Berkeley) 6/2/93
 
-NO_MAN=
+MAN=
 
 .include <bsd.own.mk>
 MK_SSP=	no

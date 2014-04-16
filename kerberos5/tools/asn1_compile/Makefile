@@ -1,7 +1,7 @@
 # $FreeBSD: head/kerberos5/tools/asn1_compile/Makefile 241298 2012-10-06 20:01:05Z marcel $
 
 PROG=	asn1_compile
-NO_MAN=
+MAN=
 LIBROKEN_A=	${.OBJDIR}/../../lib/libroken/libroken.a
 LDADD=	${LIBROKEN_A} ${LIBVERS}
 DPADD=	${LIBROKEN_A} ${LIBVERS}

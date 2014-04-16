@@ -2,7 +2,7 @@
 # $FreeBSD: head/games/ppt/Makefile 203923 2010-02-15 14:32:00Z uqs $
 
 PROG=	ppt
-NO_MAN=
+MAN=
 
 .include <bsd.prog.mk>
 

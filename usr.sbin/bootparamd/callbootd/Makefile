@@ -2,7 +2,7 @@
 # $FreeBSD: head/usr.sbin/bootparamd/callbootd/Makefile 231118 2012-02-07 09:27:07Z dim $
 
 PROG=	callbootd
-NO_MAN=
+MAN=
 SRCS=	callbootd.c ${GENSRCS}
 GENSRCS=bootparam_prot.h bootparam_prot_clnt.c bootparam_prot_xdr.c
 

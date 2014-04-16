@@ -2,6 +2,6 @@
 # $FreeBSD: head/usr.bin/dirname/Makefile 139103 2004-12-21 08:47:35Z ru $
 
 PROG=	dirname
-NO_MAN=
+MAN=
 
 .include <bsd.prog.mk>

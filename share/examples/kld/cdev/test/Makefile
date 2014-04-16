@@ -67,7 +67,7 @@
 # $FreeBSD: head/share/examples/kld/cdev/test/Makefile 203349 2010-02-01 16:13:56Z wkoszek $
 #
 PROG=	testcdev
-NO_MAN=
+MAN=
 WARNS?=	5
 
 MODSTAT= /sbin/kldstat

@@ -134,6 +134,7 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 	eh->ether_type = htons(ETHERTYPE_REPI);
 	memcpy(eh->ether_dhost, ifp->if_broadcastaddr, ETHER_ADDR_LEN);
 
+
 	/* Randomize MAC address? */
 	if(repi_random_mac_address)
 		repi_randomize_mac_address(eh->ether_shost);

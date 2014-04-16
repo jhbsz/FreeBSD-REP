@@ -1,7 +1,7 @@
 # $FreeBSD: head/tools/regression/kgssapi/Makefile 204311 2010-02-25 14:42:26Z ru $
 
 PROG=	gsstest
-NO_MAN=
+MAN=
 WARNS?=	2
 DPADD=	${LIBGSSAPI} ${LIBGSSAPI_KRB5}
 LDADD=	-lgssapi -lgssapi_krb5

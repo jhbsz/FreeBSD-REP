@@ -36,6 +36,8 @@
 #define	REPITYPE_STATUS	1	/* REPI status message */
 #define	REPITYPE_TIME	2	/* Time counter packet */
 
+/* TODO: colocar essas variaveis todas em repi.c */
+
 struct repi_stats {
 	counter_u64_t repi_input_dgrams_count;		/* Number of input repi datagrams */
 	counter_u64_t repi_output_dgrams_count;		/* Number of output repi datagrams */

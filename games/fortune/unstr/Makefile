@@ -2,7 +2,7 @@
 # $FreeBSD: head/games/fortune/unstr/Makefile 203923 2010-02-15 14:32:00Z uqs $
 
 PROG=	unstr
-NO_MAN=
+MAN=
 CFLAGS+= -I${.CURDIR}/../strfile
 
 .include <bsd.prog.mk>

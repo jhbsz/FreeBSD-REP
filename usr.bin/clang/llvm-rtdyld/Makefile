@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/clang/llvm-rtdyld/Makefile 262613 2014-02-28 18:06:00Z dim $
 
-NO_MAN=
+MAN=
 .include <bsd.own.mk>
 
 PROG_CXX=llvm-rtdyld

@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/svn/svn/Makefile 258084 2013-11-13 05:25:49Z gjb $
 
-NO_MAN=	svn.1
+MAN=
 
 .include "${.CURDIR}/../Makefile.inc"
 

@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/userboot/userboot/Makefile 262523 2014-02-26 04:49:09Z grehan $
 
-NO_MAN=
+MAN=
 
 .include <bsd.own.mk>
 MK_SSP=		no

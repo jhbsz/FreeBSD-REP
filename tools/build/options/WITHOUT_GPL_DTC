@@ -1,0 +1,3 @@
+.\" $FreeBSD:  264515 2014-04-15 20:41:55Z imp $
+Set to build the BSD licensed version of the device tree compiler, instead of the
+GPL'd one from elinux.org.

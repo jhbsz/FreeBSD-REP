@@ -2,7 +2,7 @@
 # $FreeBSD: head/tools/regression/lib/libc/resolv/Makefile 156735 2006-03-15 10:46:38Z ru $
 
 PROG=		resolv
-NO_MAN=
+MAN=
 
 # Note: this test relies on being dynamically linked.  You will get a
 # spurious PASS for a statically linked test.
