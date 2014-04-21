@@ -38,6 +38,9 @@ __FBSDID("$FreeBSD:$");
 #include <sys/types.h>
 #include <sys/counter.h>
 #include <sys/hash.h>
+#include <sys/protosw.h>
+#include <sys/domain.h>
+
 
 #include <net/if.h>
 #include <net/if_var.h>
@@ -47,6 +50,47 @@ __FBSDID("$FreeBSD:$");
 
 
 #include <netrepi/repi.h>
+
+
+/* TODO: Colocar isso em um arquivo repi_protosw.c */
+/* TODO: Colocar o usrreq num arquivo repi_usrreq.c */
+
+extern struct domain repidomain;
+
+struct protosw repisw[] = {
+{
+        .pr_type =              SOCK_DGRAM,
+        .pr_domain =            &repidomain,
+        .pr_protocol =          REPIPROTO_INTEREST,
+        .pr_flags =             PR_ATOMIC|PR_ADDR,
+        .pr_input =             NULL,
+        .pr_ctlinput =          NULL,
+        .pr_ctloutput =         NULL,
+        .pr_init =              NULL,
+#ifdef VIMAGE
+        .pr_destroy =           NULL,
+#endif
+        .pr_usrreqs =           NULL
+}
+
+};
+
+struct domain repidomain = {
+        .dom_family =           AF_REPI,
+        .dom_name =             "repi",
+        .dom_protosw =          repisw,
+        .dom_protoswNPROTOSW =  &repisw[sizeof(repisw)/sizeof(repisw[0])],
+#ifdef VIMAGE
+        .dom_rtdetach =         NULL,
+#endif
+        .dom_rtoffset =         32,
+        .dom_maxrtkey =         sizeof(struct repi_header),
+        .dom_ifattach =         NULL,
+        .dom_ifdetach =         NULL
+};
+
+
+DOMAIN_SET(repi);
 
 /* Hash used to identify a packet already forwarded */
 static int *repi_hash = NULL;

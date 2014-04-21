@@ -1,0 +1,5 @@
+.\" $FreeBSD:  264660 2014-04-18 17:03:58Z imp $
+Set to not build gcc and g++ as part of the bootstrap process.
+You must enable wither gcc or clang bootstrap to be able to build the system,
+unless an alternative compiiler is provided via
+XCC.

@@ -1,0 +1,2 @@
+.\" $FreeBSD:  264660 2014-04-18 17:03:58Z imp $
+Set to build the Clang C/C++ compiler during the bootstrap phase of the build.

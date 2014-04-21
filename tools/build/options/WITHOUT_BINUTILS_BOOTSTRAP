@@ -1,0 +1,8 @@
+.\" $FreeBSD:  264660 2014-04-18 17:03:58Z imp $
+Set to not build binutils (as, c++-filt, gconv,
+ld, nm, objcopy, objdump, readelf, size and strip)
+as part of the bootstrap process.
+.Bf -symbolic
+The option does not work for build targets unless some alternative
+toolchain is provided.
+.Ef

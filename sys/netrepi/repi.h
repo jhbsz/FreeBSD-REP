@@ -64,6 +64,8 @@ static int repi_hash_seed = 0;
 #define REPI_MASK_FIELD(size, nField, field, length) \
 	(((1 << length) - 1) << (field * (size / nField)))
 
+#define REPIPROTO_INTEREST	1
+
 struct repi_user_message {
 	char 	chat_text[55];	/* Text message from the messaging application */
 	char 	chat_id[10];	/* Application user's alias */
