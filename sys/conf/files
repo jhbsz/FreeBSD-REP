@@ -3392,6 +3392,8 @@ netpfil/pf/pf_ruleset.c		optional pf inet
 netpfil/pf/pf_table.c		optional pf inet
 netpfil/pf/in4_cksum.c		optional pf inet
 netrepi/repi.c			optional repi
+netrepi/repi_proto.c		optional repi
+netrepi/repi_usrreq.c		optional repi
 netsmb/smb_conn.c		optional netsmb
 netsmb/smb_crypt.c		optional netsmb
 netsmb/smb_dev.c		optional netsmb

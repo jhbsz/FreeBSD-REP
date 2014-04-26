@@ -122,3 +122,5 @@ options         FDT
 makeoptions     FDT_DTS_FILE=rpi.dts
 
 options 	VFP			# vfp/neon
+
+options		REPI

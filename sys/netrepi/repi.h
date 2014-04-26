@@ -28,6 +28,11 @@
 #ifndef _NETREPI_REPI_H_
 #define _NETREPI_REPI_H_
 
+#include <net/if.h>
+#include <net/ethernet.h>
+#include <netrepi/types.h>
+
+
 #ifdef _KERNEL
 
 /* Message types */
@@ -57,6 +62,21 @@ static int repi_packets_forwarding_disabled = 0;
 static int repi_hash_size = 4096;
 static int repi_hash_seed = 0;
 
+
+
+/* Macros to work with repi hash */
+
+#define REPI_HASH_CREATE(hdr) \
+	jenkins_hash32(&(hdr->seq_number), \
+			sizeof(hdr->seq_number), repi_hash_seed)
+
+#define	REPI_HASH_MOD(hash)	(hash % repi_hash_size)
+		
+
+/* Functions */
+int
+repi_output(struct ifnet *ifp, struct mbuf *m);
+
 #endif // _KERNEL
 
 #define REPI_PREFIX_LENGTH	8 /* In fields */
@@ -64,7 +84,7 @@ static int repi_hash_seed = 0;
 #define REPI_MASK_FIELD(size, nField, field, length) \
 	(((1 << length) - 1) << (field * (size / nField)))
 
-#define REPIPROTO_INTEREST	1
+#define REPIPROTO_REPI		1
 
 struct repi_user_message {
 	char 	chat_text[55];	/* Text message from the messaging application */
@@ -108,6 +128,12 @@ struct repi_header {
 struct repi_addr {
 	prefix_addr_t *prefix_buf;
 	struct ifreq ifreq;
+};
+
+struct sockaddr_repi {
+	uint8_t 	repi_len;
+	sa_family_t	repi_family;
+	char 		interest[253];	/* TODO: mudar para repi_interest */
 };
 
 #endif /* !_NETREPI_REPI_H_ */

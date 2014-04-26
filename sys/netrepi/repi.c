@@ -32,6 +32,7 @@ __FBSDID("$FreeBSD:$");
 #include <sys/kernel.h>
 #include <sys/libkern.h>
 #include <sys/socket.h>
+#include <sys/socketvar.h>
 #include <sys/sysctl.h>
 #include <sys/systm.h>
 #include <sys/mbuf.h>
@@ -50,47 +51,6 @@ __FBSDID("$FreeBSD:$");
 
 
 #include <netrepi/repi.h>
-
-
-/* TODO: Colocar isso em um arquivo repi_protosw.c */
-/* TODO: Colocar o usrreq num arquivo repi_usrreq.c */
-
-extern struct domain repidomain;
-
-struct protosw repisw[] = {
-{
-        .pr_type =              SOCK_DGRAM,
-        .pr_domain =            &repidomain,
-        .pr_protocol =          REPIPROTO_INTEREST,
-        .pr_flags =             PR_ATOMIC|PR_ADDR,
-        .pr_input =             NULL,
-        .pr_ctlinput =          NULL,
-        .pr_ctloutput =         NULL,
-        .pr_init =              NULL,
-#ifdef VIMAGE
-        .pr_destroy =           NULL,
-#endif
-        .pr_usrreqs =           NULL
-}
-
-};
-
-struct domain repidomain = {
-        .dom_family =           AF_REPI,
-        .dom_name =             "repi",
-        .dom_protosw =          repisw,
-        .dom_protoswNPROTOSW =  &repisw[sizeof(repisw)/sizeof(repisw[0])],
-#ifdef VIMAGE
-        .dom_rtdetach =         NULL,
-#endif
-        .dom_rtoffset =         32,
-        .dom_maxrtkey =         sizeof(struct repi_header),
-        .dom_ifattach =         NULL,
-        .dom_ifdetach =         NULL
-};
-
-
-DOMAIN_SET(repi);
 
 /* Hash used to identify a packet already forwarded */
 static int *repi_hash = NULL;
@@ -165,8 +125,75 @@ repi_randomize_mac_address(u_char *mac) {
 
 }
 
-static int
+int
 repi_output(struct ifnet *ifp, struct mbuf *m) {
+
+	struct sockaddr addr;
+	struct ether_header *eh;
+	struct ifnet *iface = NULL;
+	struct repi_header *rh;
+
+	/* TODO: So pode haver uma interface sendo utilizada.
+	 * Eh melhor criar uma variavel global que eh setada com um ponteiro
+	 * para essa interface no momendo do ioctl setprefix e setada para NULL
+	 * no momento do unsetprefix
+	 */
+	TAILQ_FOREACH(ifp, &ifnet, if_link) {
+
+		printf("%s\n", ifp->if_xname);
+
+		if(ifp->if_repi_prefix)
+			iface = ifp;
+
+	}
+
+	if(iface == NULL) {
+		printf("nullo\n");
+		return -1;
+	}
+
+	printf("iface %s\n", iface->if_xname);
+
+	addr.sa_family = AF_REPI;
+	addr.sa_len = m->m_hdr.mh_len;
+
+	eh = (struct ether_header *) &addr.sa_data;
+	eh->ether_type = htons(ETHERTYPE_REPI);
+	memcpy(eh->ether_dhost, iface->if_broadcastaddr, ETHER_ADDR_LEN);
+
+	/* Randomize MAC address? */
+	if(repi_random_mac_address)
+		repi_randomize_mac_address(eh->ether_shost);
+	else
+		memcpy(eh->ether_shost, IF_LLADDR(iface), ETHER_ADDR_LEN);
+
+
+	M_PREPEND(m, sizeof(struct repi_header), M_NOWAIT);
+
+	rh = mtod(m, struct repi_header *);
+
+	bzero(rh, sizeof(struct repi_header));
+
+	rh->version = 1;
+	rh->ttl = 10;
+	rh->hlen = sizeof(struct repi_header);
+	rh->seq_number = 666; /* should be random */
+	rh->prefix_dst = iface->if_repi_prefix;
+	rh->prefix_src = iface->if_repi_prefix;
+	rh->timestamp = 666;
+
+	m_clrprotoflags(m);
+
+	/* Update statistics */
+	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
+
+	/* Fly packet, fly! */
+	return((*iface->if_output)(iface, m, &addr, NULL));
+
+}
+
+static int
+repi_forward(struct ifnet *ifp, struct mbuf *m) {
 
 	struct sockaddr addr;
 	struct ether_header *eh;
@@ -178,20 +205,14 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 	eh->ether_type = htons(ETHERTYPE_REPI);
 	memcpy(eh->ether_dhost, ifp->if_broadcastaddr, ETHER_ADDR_LEN);
 
-
-	/* Randomize MAC address? */
-	if(repi_random_mac_address)
-		repi_randomize_mac_address(eh->ether_shost);
-	else
-		memcpy(eh->ether_shost, IF_LLADDR(ifp), ETHER_ADDR_LEN);
-
 	/* Update statistics */
-	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
+	counter_u64_add(repi_stats.repi_forwarded_dgrams_count, 1);
 
 	/* Fly packet, fly! */
 	return((*ifp->if_output)(ifp, m, &addr, NULL));
 
 }
+
 
 
 static void
@@ -214,8 +235,9 @@ repi_input_internal(struct mbuf *m) {
 	printf("seqnumber: %d\n", repi_hdr->seq_number);
 	printf("dst prefix: %x\n", repi_hdr->prefix_dst);
 	printf("src prefix: %x\n", repi_hdr->prefix_src);
-	printf("timestamp: %lu\n", repi_hdr->timestamp);
+	printf("timestamp: %llu\n", repi_hdr->timestamp);
 
+	/* TODO: Implementar o recvfrom aqui */
 
 	/* Reply the packet to the other machines? */
 	if(!repi_packets_forwarding_disabled) {
@@ -227,22 +249,19 @@ repi_input_internal(struct mbuf *m) {
 		/* If the packet TTL reach zero, don't send to network */
 		if(repi_hdr->ttl == 0) goto zero_ttl;
 
-		hash = jenkins_hash32(&(repi_hdr->seq_number), sizeof(repi_hdr->seq_number), repi_hash_seed);
+		hash = REPI_HASH_CREATE(repi_hdr);
 
 		/* If the packet already passed over here, don't send to network again */
-		if(repi_hash[hash % repi_hash_size] != -1) goto packet_already_forwarded;
+		if(repi_hash[REPI_HASH_MOD(hash)] != -1) goto packet_already_forwarded;
 
 		/* TODO: Implementar uma maneira de remover os numeros de sequencia do hash apos algum tempo.
 		 *	talvez atraves de uma fila circular com um tamanho razoavel
 		 * */
 
 		/* Add the packet to hash table */
-		repi_hash[hash % repi_hash_size] = repi_hdr->seq_number;
+		repi_hash[REPI_HASH_MOD(hash)] = repi_hdr->seq_number;
 
-		/* Update statistics */
-		counter_u64_add(repi_stats.repi_forwarded_dgrams_count, 1);
-
-		repi_output(ifp, m);
+		repi_forward(ifp, m);
 	}
 
 zero_ttl:
