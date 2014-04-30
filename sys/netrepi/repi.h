@@ -32,8 +32,11 @@
 #include <net/ethernet.h>
 #include <netrepi/types.h>
 
+#include <sys/hash.h>
 
 #ifdef _KERNEL
+
+#include <sys/counter.h>
 
 /* Message types */
 
@@ -59,16 +62,22 @@ static int repi_random_mac_address = 0;
 /* Enable/Disable packets forwarding */
 static int repi_packets_forwarding_disabled = 0;
 
+/* TODO: deve ser local e colocada aqui com export */
 static int repi_hash_size = 4096;
 static int repi_hash_seed = 0;
 
+extern struct ifnet *repi_ifnet;
 
 
 /* Macros to work with repi hash */
 
-#define REPI_HASH_CREATE(hdr) \
+#define REPI_HASH_PACKET_CREATE(hdr) \
 	jenkins_hash32(&(hdr->seq_number), \
 			sizeof(hdr->seq_number), repi_hash_seed)
+
+#define REPI_HASH_BIND_CREATE(interest) \
+	hash32_strn(interest, \
+			strlen(interest), repi_hash_seed)
 
 #define	REPI_HASH_MOD(hash)	(hash % repi_hash_size)
 		
@@ -78,6 +87,8 @@ int
 repi_output(struct ifnet *ifp, struct mbuf *m);
 
 #endif // _KERNEL
+
+#define	REPI_MAX_INTEREST_LEN	253
 
 #define REPI_PREFIX_LENGTH	8 /* In fields */
 #define REPI_FIELD_LENGTH	3 /* In bits */
@@ -135,5 +146,6 @@ struct sockaddr_repi {
 	sa_family_t	repi_family;
 	char 		interest[253];	/* TODO: mudar para repi_interest */
 };
+
 
 #endif /* !_NETREPI_REPI_H_ */

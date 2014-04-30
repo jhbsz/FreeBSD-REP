@@ -2607,6 +2607,9 @@ ifioctl(struct socket *so, u_long cmd, caddr_t data, struct thread *td)
 				return (ENXIO);
 
 			ifp->if_repi_prefix = ifr->ifr_repi;
+
+			repi_ifnet = (ifr->ifr_repi ? ifp : NULL);
+
 			return(0);
 		}
 	case SIOCGREPIPREFIX:

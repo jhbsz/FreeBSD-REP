@@ -40,8 +40,11 @@ __FBSDID("$FreeBSD:$");
 #include <sys/counter.h>
 #include <sys/mbuf.h>
 #include <sys/uio.h>
+#include <sys/lock.h>
+#include <sys/mutex.h>
 
 #include <netrepi/repi.h>
+#include <netrepi/repi_pcb.h>
 
 static int repi_attach(struct socket *so, int proto, struct thread *td) {
 	printf("REPI attaching\n");
@@ -49,14 +52,34 @@ static int repi_attach(struct socket *so, int proto, struct thread *td) {
 }
 
 static void repi_detach(struct socket *so) {
+
+	struct repi_pcb *pcb = (struct repi_pcb *) so->so_pcb;
+
+	pcb->so = NULL;
+	pcb->interest_hash = 0;
+
 	printf("REPI detaching\n");
 }
 
-/* TODO: Criar uma tabela relacionando o bind com o pid do processo */
+/* TODO: Criar uma tabela relacionando o bind com o pid do processo 
+ * Usar o campo so_pcb da struct socket
+ */
 static int repi_bind(struct socket *so, struct sockaddr *nam, struct thread *td) {
+
 	struct sockaddr_repi *sr;
+	struct repi_pcb *pcb;
+	uint32_t hash;
 
 	sr = (struct sockaddr_repi *) nam;
+
+	hash = REPI_HASH_BIND_CREATE(sr->interest);
+
+	printf("%s -> %u\n", sr->interest, hash);
+
+	repi_pcb_add(sr->interest, so);
+
+	pcb = repi_pcb_get(sr->interest);
+	printf("hash no pcb: %u\n", pcb->interest_hash);
 
 	printf("REPI binding - %s\n", sr->interest);
 	return 0;
@@ -66,11 +89,18 @@ static int repi_sosend(struct socket *so, struct sockaddr *addr, struct uio *uio
 		struct mbuf *control, int flags, struct thread *td) {
 
 	struct mbuf *m;
+	uint32_t *interest;
 
 	m = m_uiotombuf(uio, M_WAITOK, 0, max_hdr,
 			(M_PKTHDR | ((flags & MSG_EOR) ? M_EOR : 0)));
 
 	printf("REPI send %d - %s\n", m->m_hdr.mh_len, m->m_hdr.mh_data);
+
+	/* Appending the interest hash as a second header */
+	M_PREPEND(m, sizeof(uint32_t), M_NOWAIT);
+
+	interest = mtod(m, uint32_t *);
+	*interest = ((struct repi_pcb *)so->so_pcb)->interest_hash;
 
 	return(repi_output(NULL /* ifp */, m));
 
@@ -78,6 +108,13 @@ static int repi_sosend(struct socket *so, struct sockaddr *addr, struct uio *uio
 
 static int repi_soreceive(struct socket *so, struct sockaddr **paddr, struct uio *uio, struct mbuf **mp0,
 		struct mbuf **controlp, int *flagsp) {
+
+	printf("so_rcv: %d\n", so->so_rcv.sb_cc);
+
+	SOCKBUF_LOCK(&so->so_rcv);
+	printf("sbwait waiting\n");
+	sbwait(&(so->so_rcv));
+	SOCKBUF_UNLOCK(&so->so_rcv);
 
 	uiomove("away!", 5, uio);
 

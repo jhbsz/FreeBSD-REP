@@ -51,6 +51,7 @@ __FBSDID("$FreeBSD:$");
 
 
 #include <netrepi/repi.h>
+#include <netrepi/repi_pcb.h>
 
 /* Hash used to identify a packet already forwarded */
 static int *repi_hash = NULL;
@@ -60,6 +61,10 @@ static int *repi_hash = NULL;
 struct repi_stats repi_stats;
 
 /* sysctls functions handlers */
+
+struct ifnet *repi_ifnet = NULL;
+
+int repi_bind_hash_size = 4096;
 
 static int sysctl_repi_input_dgrams_count_handler(SYSCTL_HANDLER_ARGS) {
 
@@ -130,43 +135,36 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 
 	struct sockaddr addr;
 	struct ether_header *eh;
-	struct ifnet *iface = NULL;
 	struct repi_header *rh;
+	int error = 0;
+	uint32_t interest_hash;
 
-	/* TODO: So pode haver uma interface sendo utilizada.
-	 * Eh melhor criar uma variavel global que eh setada com um ponteiro
-	 * para essa interface no momendo do ioctl setprefix e setada para NULL
-	 * no momento do unsetprefix
+	/* repi_ifnet is asigned by the ioctl command 
+	 * and is the global and uniq interface used by repi
 	 */
-	TAILQ_FOREACH(ifp, &ifnet, if_link) {
-
-		printf("%s\n", ifp->if_xname);
-
-		if(ifp->if_repi_prefix)
-			iface = ifp;
-
-	}
-
-	if(iface == NULL) {
+	if(repi_ifnet == NULL) {
 		printf("nullo\n");
 		return -1;
 	}
 
-	printf("iface %s\n", iface->if_xname);
+	printf("iface %s\n", repi_ifnet->if_xname);
 
 	addr.sa_family = AF_REPI;
 	addr.sa_len = m->m_hdr.mh_len;
 
 	eh = (struct ether_header *) &addr.sa_data;
 	eh->ether_type = htons(ETHERTYPE_REPI);
-	memcpy(eh->ether_dhost, iface->if_broadcastaddr, ETHER_ADDR_LEN);
+	memcpy(eh->ether_dhost, repi_ifnet->if_broadcastaddr, ETHER_ADDR_LEN);
 
 	/* Randomize MAC address? */
 	if(repi_random_mac_address)
 		repi_randomize_mac_address(eh->ether_shost);
 	else
-		memcpy(eh->ether_shost, IF_LLADDR(iface), ETHER_ADDR_LEN);
+		memcpy(eh->ether_shost, IF_LLADDR(repi_ifnet), ETHER_ADDR_LEN);
 
+	interest_hash = *((uint32_t *) mtod(m, uint32_t *));
+
+	printf("output: %u\n", interest_hash);
 
 	M_PREPEND(m, sizeof(struct repi_header), M_NOWAIT);
 
@@ -177,10 +175,10 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 	rh->version = 1;
 	rh->ttl = 10;
 	rh->hlen = sizeof(struct repi_header);
-	rh->seq_number = 666; /* should be random */
-	rh->prefix_dst = iface->if_repi_prefix;
-	rh->prefix_src = iface->if_repi_prefix;
-	rh->timestamp = 666;
+	rh->seq_number = arc4random();
+	rh->prefix_dst = repi_ifnet->if_repi_prefix;
+	rh->prefix_src = repi_ifnet->if_repi_prefix;
+	rh->timestamp = time_second;
 
 	m_clrprotoflags(m);
 
@@ -188,7 +186,11 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
 
 	/* Fly packet, fly! */
-	return((*iface->if_output)(iface, m, &addr, NULL));
+	error = (*repi_ifnet->if_output)(repi_ifnet, m, &addr, NULL);
+
+	m_freem(m);
+
+	return error;
 
 }
 
@@ -207,19 +209,18 @@ repi_forward(struct ifnet *ifp, struct mbuf *m) {
 
 	/* Update statistics */
 	counter_u64_add(repi_stats.repi_forwarded_dgrams_count, 1);
+	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
 
 	/* Fly packet, fly! */
 	return((*ifp->if_output)(ifp, m, &addr, NULL));
-
 }
-
-
 
 static void
 repi_input_internal(struct mbuf *m) {
 
 	struct repi_header *repi_hdr;
 	struct ifnet *ifp = m->m_pkthdr.rcvif;
+	struct repi_pcb *pcb;
 
 	uint32_t hash;
 
@@ -249,7 +250,7 @@ repi_input_internal(struct mbuf *m) {
 		/* If the packet TTL reach zero, don't send to network */
 		if(repi_hdr->ttl == 0) goto zero_ttl;
 
-		hash = REPI_HASH_CREATE(repi_hdr);
+		hash = REPI_HASH_PACKET_CREATE(repi_hdr);
 
 		/* If the packet already passed over here, don't send to network again */
 		if(repi_hash[REPI_HASH_MOD(hash)] != -1) goto packet_already_forwarded;
@@ -263,6 +264,14 @@ repi_input_internal(struct mbuf *m) {
 
 		repi_forward(ifp, m);
 	}
+
+	/* TODO: O procedimento para acordar o processo que esta travado no recvfrom depende do bind estar funcionando 
+	 * Para isso o segundo cabeçalho precisa estar funcionando
+	 */
+	pcb = repi_pcb_get_by_hash(*((uint32_t *)mtod(m, struct repi_header *) + sizeof(struct repi_header)));
+	/* TODO: nao esta funcionando */
+	if(pcb->so)
+		sorwakeup(pcb->so);
 
 zero_ttl:
 packet_already_forwarded:
@@ -316,6 +325,9 @@ repi_init(__unused void *args) {
 	repi_hash = malloc(sizeof(int) * repi_hash_size, M_REPI_HASH, M_WAITOK);
 	memset(repi_hash, -1, sizeof(int) * repi_hash_size);
 	repi_hash_seed = arc4random();
+
+	repi_bind_hash = malloc(sizeof(struct repi_pcb) * repi_bind_hash_size, M_REPI_HASH, M_WAITOK);
+	memset(repi_bind_hash, 0, sizeof(struct repi_pcb) * repi_bind_hash_size);
 
 	netisr_register(&repi_nh);
 
