@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/Makefile 263152 2014-03-14 06:29:43Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # The boot loader
 .if ${MK_BOOT} != "no"

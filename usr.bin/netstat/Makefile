@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/12/93
 # $FreeBSD: head/usr.bin/netstat/Makefile 263152 2014-03-14 06:29:43Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	netstat
 SRCS=	if.c inet.c main.c mbuf.c mroute.c netisr.c route.c \

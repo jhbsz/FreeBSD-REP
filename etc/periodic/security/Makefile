@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/periodic/security/Makefile 257444 2013-10-31 13:00:35Z bapt $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	100.chksetuid \
 	110.neggrpperm \

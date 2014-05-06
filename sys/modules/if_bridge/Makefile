@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/if_bridge/Makefile 160730 2006-07-26 22:15:15Z thompsa $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:	${.CURDIR}/../../net
 KMOD=	if_bridge

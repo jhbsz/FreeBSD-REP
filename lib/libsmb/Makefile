@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libsmb/Makefile 258049 2013-11-12 15:09:28Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 CONTRIBDIR=	${.CURDIR}/../../contrib/smbfs
 .PATH: ${CONTRIBDIR}/lib/smb

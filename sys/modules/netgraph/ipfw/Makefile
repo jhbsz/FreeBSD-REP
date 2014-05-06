@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/netgraph/ipfw/Makefile 225586 2011-09-15 12:28:17Z ae $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 KMOD=	ng_ipfw
 SRCS= 	ng_ipfw.c opt_inet.h opt_inet6.h

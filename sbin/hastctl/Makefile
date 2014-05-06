@@ -1,6 +1,6 @@
 # $FreeBSD: head/sbin/hastctl/Makefile 250503 2013-05-11 09:51:44Z trociny $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:	${.CURDIR}/../hastd
 

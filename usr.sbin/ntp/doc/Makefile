@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/ntp/doc/Makefile 201447 2010-01-03 22:29:06Z antoine $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILESDIR=	${SHAREDIR}/doc/ntp
 

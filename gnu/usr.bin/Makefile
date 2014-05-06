@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/Makefile 256198 2013-10-09 17:07:20Z gjb $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR= ${_binutils} \
 	${_cc} \
@@ -15,6 +15,7 @@ SUBDIR= ${_binutils} \
 	${_rcs} \
 	sdiff \
 	send-pr \
+	${_tests} \
 	${_texinfo}
 
 .if ${MK_CXX} != "no"
@@ -34,6 +35,10 @@ _texinfo=	texinfo
 
 .if ${MK_RCS} != "no"
 _rcs=		rcs
+.endif
+
+.if ${MK_TESTS} != "no"
+_tests=		tests
 .endif
 
 .if ${MK_BINUTILS} != "no"

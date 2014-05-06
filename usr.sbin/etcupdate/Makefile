@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/etcupdate/Makefile 263226 2014-03-16 04:09:22Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SCRIPTS=etcupdate.sh
 MAN=	etcupdate.8

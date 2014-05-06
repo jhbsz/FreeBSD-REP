@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/telnet/Makefile 201386 2010-01-02 10:27:05Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 TELNETDIR=	${.CURDIR}/../../contrib/telnet
 .PATH:		${TELNETDIR}/telnet

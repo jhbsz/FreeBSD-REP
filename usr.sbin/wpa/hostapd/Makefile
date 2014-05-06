@@ -1,5 +1,6 @@
 # $FreeBSD: head/usr.sbin/wpa/hostapd/Makefile 252726 2013-07-04 21:12:58Z rpaulo $
 
+.include <src.opts.mk>
 .include "${.CURDIR}/../Makefile.inc"
 
 .PATH.c:${HOSTAPD_DISTDIR} \

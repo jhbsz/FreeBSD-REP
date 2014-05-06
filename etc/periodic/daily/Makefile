@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/periodic/daily/Makefile 257444 2013-10-31 13:00:35Z bapt $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	100.clean-disks \
 	110.clean-tmps \

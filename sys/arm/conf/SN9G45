@@ -17,6 +17,8 @@
 #
 # $FreeBSD: head/sys/arm/conf/SN9G45 263301 2014-03-18 14:41:18Z imp $
 
+#NO_UNIVERSE
+
 ident		SN9G45
 
 include "../at91/std.sn9g45"

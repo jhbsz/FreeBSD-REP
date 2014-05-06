@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/rc.d/Makefile 263140 2014-03-14 02:58:48Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	DAEMON \
 	FILESYSTEMS \

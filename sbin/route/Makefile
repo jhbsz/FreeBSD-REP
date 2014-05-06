@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/5/93
 # $FreeBSD: head/sbin/route/Makefile 253427 2013-07-17 14:05:20Z hrs $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	route
 MAN=	route.8

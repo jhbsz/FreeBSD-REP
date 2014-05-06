@@ -60,7 +60,7 @@ __FBSDID("$FreeBSD: head/sys/dev/usb/controller/ehci_imx.c 261410 2014-02-02 19:
 #include <machine/bus.h>
 #include <machine/resource.h>
 
-#include <arm/freescale/imx/imx_machdep.h>
+#include <arm/freescale/imx/imx_ccmvar.h>
 
 #include "opt_platform.h"
 

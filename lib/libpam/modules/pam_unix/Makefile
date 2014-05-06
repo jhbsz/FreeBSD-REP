@@ -34,6 +34,7 @@
 #
 # $FreeBSD: head/lib/libpam/modules/pam_unix/Makefile 230311 2012-01-18 18:26:56Z peter $
 
+.include <src.opts.mk>
 .include <bsd.init.mk>
 
 LIB=	pam_unix

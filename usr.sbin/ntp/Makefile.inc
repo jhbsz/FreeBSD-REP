@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/ntp/Makefile.inc 201390 2010-01-02 11:07:44Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 DEFS_LOCAL= -DPARSE -DHAVE_CONFIG_H
 NTPDEFS=   -DSYS_FREEBSD

@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/clang/libllvmipo/Makefile 243830 2012-12-03 19:24:08Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	llvmipo
 

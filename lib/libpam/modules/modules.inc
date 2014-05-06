@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libpam/modules/modules.inc 156813 2006-03-17 18:54:44Z ru $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 MODULES		 =
 MODULES		+= pam_chroot

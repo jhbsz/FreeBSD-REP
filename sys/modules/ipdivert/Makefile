@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/ipdivert/Makefile 231838 2012-02-16 21:57:50Z uqs $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../netinet
 

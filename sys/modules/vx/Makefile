@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/vx/Makefile 211690 2010-08-23 06:13:29Z imp $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../dev/vx
 

@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/4/93
 # $FreeBSD: head/libexec/Makefile 262335 2014-02-22 13:05:23Z bapt $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR=	${_atf} \
 	${_atrun} \

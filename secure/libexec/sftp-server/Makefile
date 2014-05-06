@@ -1,6 +1,6 @@
 # $FreeBSD: head/secure/libexec/sftp-server/Makefile 255460 2013-09-10 22:26:11Z des $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=   sftp-server
 SRCS=   sftp-server.c sftp-common.c sftp-server-main.c

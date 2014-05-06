@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/uboot/lib/Makefile 262664 2014-03-01 19:02:00Z ian $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../common
 

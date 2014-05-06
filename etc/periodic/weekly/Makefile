@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/periodic/weekly/Makefile 257444 2013-10-31 13:00:35Z bapt $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	340.noid \
 	450.status-security \

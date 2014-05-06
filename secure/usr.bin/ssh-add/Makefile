@@ -1,6 +1,6 @@
 # $FreeBSD: head/secure/usr.bin/ssh-add/Makefile 255460 2013-09-10 22:26:11Z des $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ssh-add
 SRCS+=	ssh-add.c

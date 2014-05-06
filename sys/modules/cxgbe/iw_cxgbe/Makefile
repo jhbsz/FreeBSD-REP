@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/cxgbe/iw_cxgbe/Makefile 256694 2013-10-17 18:37:25Z np $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 CXGBE = ${.CURDIR}/../../../dev/cxgbe
 .PATH: ${CXGBE}/iw_cxgbe

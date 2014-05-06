@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/ipfilter/Makefile 260039 2013-12-29 14:21:55Z dim $ 
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../contrib/ipfilter/netinet
 

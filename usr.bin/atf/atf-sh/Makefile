@@ -25,6 +25,7 @@
 #
 # $FreeBSD: head/usr.bin/atf/atf-sh/Makefile 260576 2014-01-12 21:56:26Z jmmv $
 
+.include <src.opts.mk>
 .include <bsd.init.mk>
 
 ATF=		${.CURDIR:H:H:H}/contrib/atf

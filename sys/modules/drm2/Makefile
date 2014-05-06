@@ -1,5 +1,6 @@
 # $FreeBSD: head/sys/modules/drm2/Makefile 254899 2013-08-26 09:17:21Z dumbbell $
 
+.include <src.opts.mk>
 .include <bsd.own.mk>
 
 .if ${MACHINE_CPUARCH} == "amd64"

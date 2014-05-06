@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/i386/loader/Makefile 261567 2014-02-06 21:54:21Z emaste $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 MK_SSP=		no
 
 LOADER?=	loader

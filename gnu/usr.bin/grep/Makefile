@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/grep/Makefile 251468 2013-06-06 11:59:38Z jkim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 GREP_LIBZ=YES
 

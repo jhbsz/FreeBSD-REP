@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.2 (Berkeley) 4/2/94
 # $FreeBSD: head/bin/mv/Makefile 259210 2013-12-11 04:09:17Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	mv
 

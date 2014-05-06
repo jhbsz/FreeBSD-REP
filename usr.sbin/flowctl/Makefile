@@ -2,7 +2,7 @@
 # $FreeBSD: head/usr.sbin/flowctl/Makefile 223824 2011-07-06 15:18:32Z pluknet $
 #
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 	
 PROG=	flowctl
 MAN=	flowctl.8

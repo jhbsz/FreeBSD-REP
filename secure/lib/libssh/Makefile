@@ -1,6 +1,6 @@
 # $FreeBSD: head/secure/lib/libssh/Makefile 261320 2014-01-31 13:12:02Z des $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	ssh
 PRIVATELIB=	true

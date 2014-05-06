@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libmilter/Makefile 201381 2010-01-02 09:58:07Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SENDMAIL_DIR=${.CURDIR}/../../contrib/sendmail
 .PATH:	${SENDMAIL_DIR}/libmilter ${SENDMAIL_DIR}/libsm

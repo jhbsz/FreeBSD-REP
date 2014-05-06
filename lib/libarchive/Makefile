@@ -1,5 +1,5 @@
 # $FreeBSD: head/lib/libarchive/Makefile 255893 2013-09-26 17:55:36Z delphij $
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIBARCHIVEDIR=	${.CURDIR}/../../contrib/libarchive
 

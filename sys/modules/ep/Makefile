@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/ep/Makefile 147959 2005-07-13 14:53:59Z imp $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../dev/ep
 

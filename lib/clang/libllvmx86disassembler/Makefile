@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/clang/libllvmx86disassembler/Makefile 255722 2013-09-20 01:52:02Z emaste $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	llvmx86disassembler
 

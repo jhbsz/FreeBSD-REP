@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/5/93
 # $FreeBSD: head/share/man/man1/Makefile 257850 2013-11-08 14:24:47Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 MAN=	builtin.1 intro.1
 

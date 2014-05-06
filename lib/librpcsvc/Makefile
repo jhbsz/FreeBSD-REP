@@ -1,7 +1,7 @@
 #	from: @(#)Makefile    5.10 (Berkeley) 6/24/90
 # $FreeBSD: head/lib/librpcsvc/Makefile 231118 2012-02-07 09:27:07Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../include/rpcsvc
 

@@ -1,7 +1,7 @@
 # $FreeBSD: head/tools/tools/ath/athalq/Makefile 250266 2013-05-05 09:38:25Z adrian $
 
 PROG=	athalq
-NOMAN=	yes
+MAN=
 
 CFLAGS+=	-I../../../../sys/contrib
 

@@ -1,12 +1,14 @@
 # $FreeBSD: head/kerberos5/Makefile.inc 255455 2013-09-10 18:40:43Z des $
 
+.include <src.opts.mk>
+
 NO_LINT=
 
 KRB5DIR=	${.CURDIR}/../../../crypto/heimdal
 
 CFLAGS+=	-DHAVE_CONFIG_H -I${.CURDIR}/../../include
 
-.if defined(WITH_OPENLDAP) && !defined(COMPAT_32BIT)
+.if ${MK_OPENLDAP} != "no" && !defined(COMPAT_32BIT)
 OPENLDAPBASE?=	/usr/local
 LDAPLDADD=	-lldap -llber
 LDAPDPADD=	${LDAPLDADD:C;^-l(.*)$;${OPENLDAPBASE}/lib/lib\1.a;}

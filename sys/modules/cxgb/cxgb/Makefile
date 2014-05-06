@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/cxgb/cxgb/Makefile 255608 2013-09-16 06:25:54Z kib $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 CXGB = ${.CURDIR}/../../../dev/cxgb
 .PATH: ${CXGB} ${CXGB}/common ${CXGB}/sys

@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/mailwrapper/Makefile 213749 2010-10-12 21:01:26Z markm $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if ${MK_MAILWRAPPER} != "no"
 PROG=	mailwrapper

@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/powerpc/uboot/Makefile 261614 2014-02-07 22:49:42Z emaste $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=		ubldr
 NEWVERSWHAT=	"U-Boot loader" ${MACHINE_ARCH}

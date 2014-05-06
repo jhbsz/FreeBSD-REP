@@ -1,5 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/cc/Makefile.inc 258445 2013-11-21 21:05:11Z andreast $
 
+.include <src.opts.mk>
 .include "../Makefile.inc"
 
 # Sometimes this is .include'd several times...

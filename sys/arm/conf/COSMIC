@@ -17,7 +17,9 @@
 #
 # $FreeBSD: head/sys/arm/conf/COSMIC 263301 2014-03-18 14:41:18Z imp $
 
-include		"VYBRID.common"
+#NO_UNIVERSE
+
+include		"VYBRID"
 ident		COSMIC
 
 #FDT

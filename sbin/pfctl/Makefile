@@ -1,6 +1,6 @@
 # $FreeBSD: head/sbin/pfctl/Makefile 259916 2013-12-26 15:51:14Z bz $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # pf_ruleset.c is shared between kernel and pfctl
 .PATH: ${.CURDIR}/../../sys/netpfil/pf

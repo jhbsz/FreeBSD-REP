@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/pc98/loader/Makefile 242688 2012-11-07 02:14:03Z dteske $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 MK_SSP=		no
 
 LOADER?=	loader

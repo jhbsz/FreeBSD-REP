@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/dummynet/Makefile 240494 2012-09-14 11:51:49Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:  ${.CURDIR}/../../netpfil/ipfw
 KMOD=   dummynet

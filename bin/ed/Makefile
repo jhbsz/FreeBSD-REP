@@ -1,6 +1,6 @@
 # $FreeBSD: head/bin/ed/Makefile 235654 2012-05-19 17:55:49Z marcel $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ed
 SRCS=	buf.c cbc.c glbl.c io.c main.c re.c sub.c undo.c

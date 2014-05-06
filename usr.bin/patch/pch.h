@@ -27,10 +27,10 @@
  * $FreeBSD: head/usr.bin/patch/pch.h 246091 2013-01-29 20:05:16Z delphij $
  */
 
-#define OLD_FILE	0
-#define NEW_FILE	1
-#define INDEX_FILE	2
-#define MAX_FILE	3
+#define	OLD_FILE	0
+#define	NEW_FILE	1
+#define	INDEX_FILE	2
+#define	MAX_FILE	3
 
 struct file_name {
 	char *path;

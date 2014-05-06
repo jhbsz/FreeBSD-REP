@@ -29,7 +29,7 @@
 #
 # $FreeBSD: head/sys/boot/mips/beri/loader/Makefile 262198 2014-02-18 23:22:54Z rwatson $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 MK_SSP=		no
 
 PROG?=		loader

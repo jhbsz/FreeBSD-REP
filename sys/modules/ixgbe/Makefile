@@ -1,6 +1,6 @@
 #$FreeBSD: head/sys/modules/ixgbe/Makefile 251964 2013-06-18 21:28:19Z jfv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:  ${.CURDIR}/../../dev/ixgbe
 

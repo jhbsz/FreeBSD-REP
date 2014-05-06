@@ -1,6 +1,6 @@
 # $FreeBSD: head/libexec/tcpd/Makefile 201380 2010-01-02 09:50:19Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../contrib/tcp_wrappers
 

@@ -1,6 +1,6 @@
 # $FreeBSD: head/libexec/rtld-elf/Makefile 260849 2014-01-18 14:22:56Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 MK_SSP=		no
 
 PROG?=		ld-elf.so.1

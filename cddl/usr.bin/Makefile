@@ -1,16 +1,21 @@
 # $FreeBSD: head/cddl/usr.bin/Makefile 219089 2011-02-27 19:41:40Z pjd $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR= \
 	ctfconvert \
 	ctfdump \
 	ctfmerge \
 	sgsmsg \
+	${_tests} \
 	${_zinject} \
 	${_zlook} \
 	${_zstreamdump} \
 	${_ztest}
+
+.if ${MK_TESTS} != "no"
+_tests=	tests
+.endif
 
 .if ${MK_ZFS} != "no"
 _zinject= zinject

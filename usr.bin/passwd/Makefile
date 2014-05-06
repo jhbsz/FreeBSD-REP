@@ -1,7 +1,7 @@
 # From:	@(#)Makefile	8.3 (Berkeley) 4/2/94
 # $FreeBSD: head/usr.bin/passwd/Makefile 243617 2012-11-27 16:23:12Z pjd $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG	 = passwd
 BINOWN	 = root

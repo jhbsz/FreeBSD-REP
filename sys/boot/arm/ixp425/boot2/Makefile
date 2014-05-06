@@ -1,6 +1,6 @@
 #  $FreeBSD: head/sys/boot/arm/ixp425/boot2/Makefile 255939 2013-09-29 15:19:34Z andrew $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # We get a lot of the std lib functions from here.
 .PATH: ${.CURDIR}/../../at91/libat91

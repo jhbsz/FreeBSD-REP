@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/6/93
 # $FreeBSD: head/usr.bin/systat/Makefile 261296 2014-01-30 21:08:36Z brooks $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	systat
 SRCS=	cmds.c cmdtab.c devs.c fetch.c iostat.c keyboard.c main.c \

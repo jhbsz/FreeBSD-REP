@@ -1,7 +1,7 @@
 # $FreeBSD: head/sys/modules/mlx4/Makefile 260111 2013-12-30 22:14:31Z dim $
 .PATH:  ${.CURDIR}/../../ofed/drivers/net/mlx4
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:  ${.CURDIR}/../../ofed/include/linux
 KMOD    = mlx4

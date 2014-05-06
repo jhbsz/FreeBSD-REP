@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/em/Makefile 253303 2013-07-12 22:36:26Z jfv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:  ${.CURDIR}/../../dev/e1000
 KMOD    = if_em

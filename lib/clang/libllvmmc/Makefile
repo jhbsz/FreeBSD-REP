@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/clang/libllvmmc/Makefile 261991 2014-02-16 19:44:07Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	llvmmc
 

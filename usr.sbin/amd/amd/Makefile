@@ -6,7 +6,7 @@
 # $FreeBSD: head/usr.sbin/amd/amd/Makefile 177718 2008-03-29 18:13:15Z ru $
 #
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../../contrib/amd/amd
 

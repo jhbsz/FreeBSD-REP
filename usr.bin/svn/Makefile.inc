@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/svn/Makefile.inc 252003 2013-06-19 19:44:57Z truckman $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if ${MK_SVN} == "yes"
 SVNLITE?=

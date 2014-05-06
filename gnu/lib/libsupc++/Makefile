@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/lib/libsupc++/Makefile 259730 2013-12-22 17:51:33Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 GCCVER=	4.2
 GCCDIR=	${.CURDIR}/../../../contrib/gcc

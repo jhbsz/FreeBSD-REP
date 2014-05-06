@@ -1,6 +1,6 @@
 # $FreeBSD: head/sbin/mdconfig/Makefile 263220 2014-03-16 02:07:08Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=		mdconfig
 MAN=		mdconfig.8

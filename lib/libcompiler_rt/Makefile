@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libcompiler_rt/Makefile 255092 2013-08-31 08:50:45Z theraven $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	compiler_rt
 NO_PIC=

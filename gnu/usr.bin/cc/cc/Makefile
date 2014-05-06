@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/cc/cc/Makefile 234782 2012-04-29 09:32:44Z kib $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .include "../Makefile.inc"
 .include "../Makefile.fe"

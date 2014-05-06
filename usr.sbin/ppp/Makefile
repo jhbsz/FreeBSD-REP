@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/ppp/Makefile 251279 2013-06-02 23:56:38Z brian $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ppp
 MAN=	ppp.8

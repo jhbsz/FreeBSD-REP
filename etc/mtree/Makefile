@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/mtree/Makefile 258232 2013-11-16 19:41:04Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	${_BSD.debug.dist} \
 	BSD.include.dist \

@@ -1,0 +1,2 @@
+.\" $FreeBSD:  264902 2014-04-24 23:17:31Z imp $
+Enable building openldap support for kerberos.

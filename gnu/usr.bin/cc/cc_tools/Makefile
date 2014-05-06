@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/cc/cc_tools/Makefile 245539 2013-01-17 05:56:28Z andrew $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 CFLAGS+=	-I.
 

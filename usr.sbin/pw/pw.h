@@ -26,6 +26,7 @@
  * $FreeBSD: head/usr.sbin/pw/pw.h 242349 2012-10-30 08:00:53Z bapt $
  */
 
+#define _WITH_GETLINE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/dpt/Makefile 168600 2007-04-10 20:33:31Z marius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:	${.CURDIR}/../../dev/dpt
 KMOD=	dpt

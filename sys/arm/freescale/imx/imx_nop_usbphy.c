@@ -47,7 +47,7 @@ __FBSDID("$FreeBSD: head/sys/arm/freescale/imx/imx_nop_usbphy.c 261410 2014-02-0
 
 #include <machine/bus.h>
 
-#include <arm/freescale/imx/imx_machdep.h>
+#include <arm/freescale/imx/imx_ccmvar.h>
 
 /*
  * Table of supported FDT compat strings.

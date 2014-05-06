@@ -1,6 +1,6 @@
 # $FreeBSD: head/secure/Makefile.inc 249971 2013-04-27 05:44:39Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if exists(${.CURDIR}/../../lib/libcrypt/obj)
 CRYPTOBJDIR=	${.CURDIR}/../../lib/libcrypt/obj

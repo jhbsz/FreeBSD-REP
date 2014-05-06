@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.5 (Berkeley) 3/31/94
 # $FreeBSD: head/sbin/Makefile 263220 2014-03-16 02:07:08Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # XXX MISSING:		icheck ncheck
 

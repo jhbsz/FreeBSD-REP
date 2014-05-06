@@ -1,5 +1,6 @@
 #  $FreeBSD: head/sys/boot/arm/at91/libat91/Makefile 238187 2012-07-07 04:51:59Z imp $
 
+.include <src.opts.mk>
 .include "${.CURDIR}/../Makefile.inc"
 
 SOC?=at91rm9200

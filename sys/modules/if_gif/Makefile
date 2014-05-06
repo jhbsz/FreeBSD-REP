@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/if_gif/Makefile 193588 2009-06-06 17:01:44Z rwatson $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../net ${.CURDIR}/../../netinet ${.CURDIR}/../../netinet6
 

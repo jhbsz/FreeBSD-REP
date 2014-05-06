@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/sort/Makefile 241695 2012-10-18 15:39:29Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	sort
 

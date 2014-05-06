@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.8 (Berkeley) 3/28/97
 # $FreeBSD: head/usr.sbin/sendmail/Makefile 246880 2013-02-16 20:17:31Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SENDMAIL_DIR=${.CURDIR}/../../contrib/sendmail
 SMDIR=	${SENDMAIL_DIR}/src

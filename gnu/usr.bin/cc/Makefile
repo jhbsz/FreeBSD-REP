@@ -1,6 +1,6 @@
 # $FreeBSD: head/gnu/usr.bin/cc/Makefile 255321 2013-09-06 20:08:03Z theraven $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # The order of some of these are rather important.  Some depend on previous
 # subdirs.

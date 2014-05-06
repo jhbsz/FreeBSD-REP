@@ -2,7 +2,7 @@
 # $FreeBSD: head/tools/regression/priv/Makefile 253385 2013-07-16 09:38:51Z kevlo $
 #
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	priv
 SRCS=	main.c				\

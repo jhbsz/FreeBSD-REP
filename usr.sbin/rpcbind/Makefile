@@ -1,7 +1,7 @@
 #	$NetBSD: Makefile,v 1.3 2000/06/20 13:56:43 fvdl Exp $
 # $FreeBSD: head/usr.sbin/rpcbind/Makefile 201390 2010-01-02 11:07:44Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	rpcbind
 MAN=	rpcbind.8

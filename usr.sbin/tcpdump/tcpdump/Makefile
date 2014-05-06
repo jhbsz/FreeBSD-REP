@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/tcpdump/tcpdump/Makefile 259433 2013-12-15 23:05:19Z pjd $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 TCPDUMP_DISTDIR?= ${.CURDIR}/../../../contrib/tcpdump
 .PATH: ${TCPDUMP_DISTDIR}

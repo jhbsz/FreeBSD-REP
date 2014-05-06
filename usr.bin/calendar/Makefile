@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/6/93
 # $FreeBSD: head/usr.bin/calendar/Makefile 263227 2014-03-16 08:04:06Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	calendar
 SRCS=	calendar.c locale.c events.c dates.c parsedata.c io.c day.c \

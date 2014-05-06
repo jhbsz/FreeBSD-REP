@@ -1,7 +1,7 @@
 #	From: @(#)Makefile	8.1 (Berkeley) 6/10/93
 # $FreeBSD: head/share/doc/smm/Makefile 239739 2012-08-27 17:15:14Z jhb $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # The following modules do not describe FreeBSD:
 # 14.uucpimpl, 15.uucpnet

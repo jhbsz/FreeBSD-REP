@@ -1,6 +1,6 @@
 # $FreeBSD: head/include/arpa/Makefile 245911 2013-01-25 17:40:10Z brooks $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 NO_OBJ=
 INCS=	ftp.h inet.h nameser.h nameser_compat.h tftp.h

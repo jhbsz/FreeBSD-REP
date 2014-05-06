@@ -27,7 +27,7 @@
 #
 # $FreeBSD: head/sbin/setkey/Makefile 245492 2013-01-16 05:03:46Z eadler $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	setkey
 MAN=	setkey.8

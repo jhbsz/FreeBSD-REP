@@ -1,7 +1,7 @@
 
 # $FreeBSD: head/sys/modules/aic7xxx/ahc/Makefile 260401 2014-01-07 19:33:17Z scottl $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:	${.CURDIR}/../../../dev/aic7xxx
 KMOD=	ahc

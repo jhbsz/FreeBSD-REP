@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/jail/Makefile 249657 2013-04-19 19:45:00Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	jail
 MAN=	jail.8 jail.conf.5

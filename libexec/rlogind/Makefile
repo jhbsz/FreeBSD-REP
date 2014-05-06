@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/4/93
 # $FreeBSD: head/libexec/rlogind/Makefile 160742 2006-07-27 12:05:05Z yar $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	rlogind
 MAN=	rlogind.8

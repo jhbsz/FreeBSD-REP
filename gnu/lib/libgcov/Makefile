@@ -1,8 +1,9 @@
 # $FreeBSD: head/gnu/lib/libgcov/Makefile 245539 2013-01-17 05:56:28Z andrew $
 
-NO_PROFILE=
-.include <bsd.own.mk>
+MK_PROFILE=	no
 MK_SSP=		no
+
+.include <src.opts.mk>
 .include "${.CURDIR}/../../usr.bin/cc/Makefile.tgt"
 
 GCCDIR=	${.CURDIR}/../../../contrib/gcc

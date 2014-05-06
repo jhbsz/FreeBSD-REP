@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/ar/Makefile 249657 2013-04-19 19:45:00Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ar
 SRCS=	ar.c acplex.l acpyacc.y read.c util.c write.c y.tab.h

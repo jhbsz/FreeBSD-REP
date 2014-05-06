@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libproc/Makefile 240156 2012-09-06 03:19:48Z rpaulo $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIB=	proc
 

@@ -1,7 +1,7 @@
 #	$NetBSD: Makefile,v 1.1 2002/03/01 11:21:58 ad Exp $
 # $FreeBSD: head/bin/pkill/Makefile 202532 2010-01-17 21:56:27Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	pkill
 

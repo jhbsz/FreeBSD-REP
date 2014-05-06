@@ -1,7 +1,7 @@
 # $FreeBSD: head/sys/modules/mlxen/Makefile 260102 2013-12-30 20:34:53Z dim $
 .PATH:  ${.CURDIR}/../../ofed/drivers/net/mlx4
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 KMOD    = mlxen
 SRCS    = device_if.h bus_if.h pci_if.h vnode_if.h

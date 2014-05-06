@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/gssd/Makefile 245014 2013-01-03 22:24:39Z rmacklem $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	gssd
 MAN=	gssd.8

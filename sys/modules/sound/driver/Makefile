@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/sound/driver/Makefile 232337 2012-03-01 13:10:18Z mav $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # Modules that include binary-only blobs of microcode should be selectable by
 # MK_SOURCELESS_UCODE option (see below).

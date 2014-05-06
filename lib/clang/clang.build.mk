@@ -1,5 +1,7 @@
 # $FreeBSD: head/lib/clang/clang.build.mk 262613 2014-02-28 18:06:00Z dim $
 
+.include <src.opts.mk>
+
 CLANG_SRCS=	${LLVM_SRCS}/tools/clang
 
 CFLAGS+=	-I${LLVM_SRCS}/include -I${CLANG_SRCS}/include \

@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 7/19/93
 # $FreeBSD: head/usr.bin/su/Makefile 226428 2011-10-16 09:09:33Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	su
 

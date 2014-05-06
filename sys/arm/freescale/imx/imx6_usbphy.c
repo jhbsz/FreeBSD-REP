@@ -45,7 +45,7 @@ __FBSDID("$FreeBSD: head/sys/arm/freescale/imx/imx6_usbphy.c 261410 2014-02-02 1
 
 #include <machine/bus.h>
 
-#include <arm/freescale/imx/imx_machdep.h>
+#include <arm/freescale/imx/imx_ccmvar.h>
 #include <arm/freescale/imx/imx6_anatopreg.h>
 #include <arm/freescale/imx/imx6_anatopvar.h>
 

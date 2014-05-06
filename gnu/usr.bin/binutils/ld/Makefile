@@ -1,7 +1,7 @@
 # $FreeBSD: head/gnu/usr.bin/binutils/ld/Makefile 257530 2013-11-01 22:03:20Z brooks $
 
 .include "../Makefile.inc0"
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${SRCDIR}/ld
 

@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/clang/clang/Makefile 262613 2014-02-28 18:06:00Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG_CXX=clang
 

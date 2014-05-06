@@ -18,6 +18,8 @@
 #
 # $FreeBSD: head/sys/arm/conf/QILA9G20 263301 2014-03-18 14:41:18Z imp $
 
+#NO_UNIVERSE
+
 ident		QILA9G20
 
 include "../at91/std.qila9g20"

@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/clang/Makefile 262613 2014-02-28 18:06:00Z dim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if !make(install)
 .if !defined(EARLY_BUILD)

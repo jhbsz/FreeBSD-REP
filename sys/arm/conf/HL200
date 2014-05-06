@@ -17,6 +17,8 @@
 #
 # $FreeBSD: head/sys/arm/conf/HL200 263301 2014-03-18 14:41:18Z imp $
 
+#NO_UNIVERSE
+
 ident		HL200
 
 include "../at91/std.hl200"

@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/bsnmpd/modules/Makefile 261797 2014-02-12 09:59:48Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../../contrib/bsnmp/snmpd
 

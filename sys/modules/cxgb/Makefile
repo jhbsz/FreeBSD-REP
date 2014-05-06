@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/cxgb/Makefile 256725 2013-10-18 09:17:35Z trasz $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR= cxgb
 SUBDIR+= cxgb_t3fw

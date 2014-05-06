@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/cpio/Makefile 248616 2013-03-22 13:36:03Z mm $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 LIBARCHIVEDIR=	${.CURDIR}/../../contrib/libarchive
 LIBARCHIVECONFDIR=	${.CURDIR}/../../lib/libarchive

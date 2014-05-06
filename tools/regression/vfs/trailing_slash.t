@@ -3,7 +3,7 @@
 # $FreeBSD: head/tools/regression/vfs/trailing_slash.t 192897 2009-05-27 15:15:58Z des $
 #
 # Tests vfs_lookup()'s handling of trailing slashes for symlinks that
-# point to files.  See kern/21768
+# point to files.  See kern/21768 for details.  Fixed in r193028.
 #
 
 testfile="/tmp/testfile-$$"

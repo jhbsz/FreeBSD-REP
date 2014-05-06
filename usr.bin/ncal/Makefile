@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.bin/ncal/Makefile 263227 2014-03-16 08:04:06Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ncal
 

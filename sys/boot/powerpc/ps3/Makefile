@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/powerpc/ps3/Makefile 261614 2014-02-07 22:49:42Z emaste $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 MK_SSP=		no
 
 PROG=		loader.ps3

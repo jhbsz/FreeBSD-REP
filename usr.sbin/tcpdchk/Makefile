@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/tcpdchk/Makefile 201390 2010-01-02 11:07:44Z ed $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH: ${.CURDIR}/../../contrib/tcp_wrappers
 

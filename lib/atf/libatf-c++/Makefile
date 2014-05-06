@@ -25,6 +25,7 @@
 #
 # $FreeBSD: head/lib/atf/libatf-c++/Makefile 261897 2014-02-14 19:33:16Z jmmv $
 
+.include <src.opts.mk>
 .include <bsd.init.mk>
 
 LIB=		atf-c++

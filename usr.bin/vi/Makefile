@@ -2,7 +2,7 @@
 # $FreeBSD: head/usr.bin/vi/Makefile 261296 2014-01-30 21:08:36Z brooks $
 #
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SRCDIR=		${.CURDIR}/../../contrib/nvi
 SUBDIR+=	catalog

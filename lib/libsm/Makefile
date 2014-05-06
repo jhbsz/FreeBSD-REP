@@ -1,6 +1,6 @@
 # $FreeBSD: head/lib/libsm/Makefile 261195 2014-01-26 23:40:31Z gshapiro $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SENDMAIL_DIR=${.CURDIR}/../../contrib/sendmail
 .PATH:	${SENDMAIL_DIR}/libsm

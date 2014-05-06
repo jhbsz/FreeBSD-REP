@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.2 (Berkeley) 4/4/94
 # $FreeBSD: head/libexec/ftpd/Makefile 159276 2006-06-05 15:50:34Z yar $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ftpd
 MAN=	ftpd.8 ftpchroot.5

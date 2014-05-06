@@ -1,6 +1,6 @@
 # $FreeBSD: head/usr.sbin/lpr/Makefile.inc 160753 2006-07-27 14:52:12Z yar $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if ${MK_INET6_SUPPORT} != "no"
 CFLAGS+= -DINET6

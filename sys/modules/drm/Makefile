@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/drm/Makefile 230972 2012-02-04 00:54:43Z rmh $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # Modules that include binary-only blobs of microcode should be selectable by
 # MK_SOURCELESS_UCODE option (see below).

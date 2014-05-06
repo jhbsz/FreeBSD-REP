@@ -2,7 +2,7 @@
 # $FreeBSD: head/sys/modules/cxgbe/tom/Makefile 245434 2013-01-14 20:36:22Z np $
 #
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 CXGBE = ${.CURDIR}/../../../dev/cxgbe
 .PATH: ${CXGBE}/tom

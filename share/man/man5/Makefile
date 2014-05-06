@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/5/93
 #	$FreeBSD: head/share/man/man5/Makefile 256365 2013-10-12 06:06:53Z rpaulo $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 #MISSING: dump.5 plot.5
 MAN=	acct.5 \

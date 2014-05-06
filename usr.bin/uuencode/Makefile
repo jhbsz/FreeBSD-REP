@@ -1,7 +1,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/6/93
 # $FreeBSD: head/usr.bin/uuencode/Makefile 263227 2014-03-16 08:04:06Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	uuencode
 MAN=	uuencode.1 uuencode.format.5

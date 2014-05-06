@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/boot/i386/Makefile 200872 2009-12-22 20:56:33Z jhb $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR=		mbr pmbr boot0 boot0sio btx boot2 cdboot gptboot kgzldr \
 		libi386 libfirewire loader

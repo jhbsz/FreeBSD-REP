@@ -1,7 +1,7 @@
 #        @(#)Makefile	8.1 (Berkeley) 5/31/93
 # $FreeBSD: head/bin/test/Makefile 259210 2013-12-11 04:09:17Z jmmv $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	test
 LINKS=	${BINDIR}/test ${BINDIR}/[

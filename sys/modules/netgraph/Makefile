@@ -1,7 +1,7 @@
 # $Whistle: Makefile,v 1.5 1999/01/24 06:48:37 archie Exp $
 # $FreeBSD: head/sys/modules/netgraph/Makefile 257249 2013-10-28 12:47:05Z glebius $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 SUBDIR=	async \
 	atm \

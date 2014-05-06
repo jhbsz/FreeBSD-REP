@@ -1,10 +1,14 @@
 #	from: @(#)Makefile	5.11 (Berkeley) 5/21/91
 # $FreeBSD: head/etc/Makefile 262335 2014-02-22 13:05:23Z bapt $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .if ${MK_SENDMAIL} != "no"
 SUBDIR=	sendmail
+.endif
+
+.if ${MK_TESTS} != "no"
+SUBDIR+=tests
 .endif
 
 BIN1=	crontab \

@@ -1,6 +1,6 @@
 # $FreeBSD: head/etc/periodic/monthly/Makefile 254978 2013-08-27 22:37:29Z jkim $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 FILES=	450.status-security \
 	999.local

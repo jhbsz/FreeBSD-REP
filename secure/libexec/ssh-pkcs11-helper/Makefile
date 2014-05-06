@@ -1,6 +1,6 @@
 # $FreeBSD: head/secure/libexec/ssh-pkcs11-helper/Makefile 255460 2013-09-10 22:26:11Z des $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	ssh-pkcs11-helper
 SRCS=	ssh-pkcs11.c ssh-pkcs11-helper.c

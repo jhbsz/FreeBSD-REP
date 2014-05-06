@@ -1,7 +1,7 @@
 #	From: @(#)Makefile	8.3 (Berkeley) 1/7/94
 # $FreeBSD: head/usr.bin/Makefile 261257 2014-01-29 05:00:04Z imp $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 # XXX MISSING:		deroff diction graph learn plot
 #			spell spline struct xsend
@@ -182,7 +182,6 @@ SUBDIR=	alias \
 	unvis \
 	uudecode \
 	uuencode \
-	vi \
 	vis \
 	vmstat \
 	w \
@@ -280,11 +279,7 @@ SUBDIR+=	msgs
 .endif
 
 .if ${MK_MAKE} != "no"
-.if ${MK_BMAKE} != "no"
 SUBDIR+=	bmake
-.else
-SUBDIR+=	make
-.endif
 .endif
 
 .if ${MK_MAN_UTILS} != "no"
@@ -359,6 +354,10 @@ SUBDIR+=	unifdef
 SUBDIR+=	xlint
 SUBDIR+=	xstr
 SUBDIR+=	yacc
+.endif
+
+.if ${MK_VI} != "no"
+SUBDIR+=	vi
 .endif
 
 .if ${MK_USB} != "no"

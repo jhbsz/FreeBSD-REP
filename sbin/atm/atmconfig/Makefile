@@ -5,7 +5,7 @@
 #
 # $FreeBSD: head/sbin/atm/atmconfig/Makefile 226440 2011-10-16 16:58:28Z cognet $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	atmconfig
 .ifndef RESCUE

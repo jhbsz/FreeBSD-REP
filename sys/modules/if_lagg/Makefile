@@ -1,6 +1,6 @@
 # $FreeBSD: head/sys/modules/if_lagg/Makefile 168793 2007-04-17 00:35:11Z thompsa $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 .PATH:	${.CURDIR}/../../net
 KMOD=	if_lagg

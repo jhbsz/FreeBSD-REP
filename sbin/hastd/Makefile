@@ -1,6 +1,6 @@
 # $FreeBSD: head/sbin/hastd/Makefile 250503 2013-05-11 09:51:44Z trociny $
 
-.include <bsd.own.mk>
+.include <src.opts.mk>
 
 PROG=	hastd
 SRCS=	activemap.c
