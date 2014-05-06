@@ -134,6 +134,7 @@ struct repi_header {
 	prefix_addr_t	prefix_dst;		/* Destination prefix */
 	prefix_addr_t	prefix_src;		/* Source prefix */
 	uint64_t		timestamp;		/* Timestamp when the packet was sent */
+	uint32_t		interest;		/* Application interest hash */
 };
 
 struct repi_addr {

@@ -42,12 +42,21 @@ __FBSDID("$FreeBSD:$");
 #include <sys/uio.h>
 #include <sys/lock.h>
 #include <sys/mutex.h>
+#include <sys/errno.h>
+
+#include <net/if.h>
+#include <net/if_var.h>
+#include <net/if_dl.h>
+#include <net/ethernet.h>
 
 #include <netrepi/repi.h>
 #include <netrepi/repi_pcb.h>
 
 static int repi_attach(struct socket *so, int proto, struct thread *td) {
 	printf("REPI attaching\n");
+
+	soreserve(so, 1400, 1400);
+
 	return 0;
 }
 
@@ -62,7 +71,7 @@ static void repi_detach(struct socket *so) {
 }
 
 /* TODO: Criar uma tabela relacionando o bind com o pid do processo 
- * Usar o campo so_pcb da struct socket
+ * Usar o campo so_pcb da struct socket. USAR PCB.
  */
 static int repi_bind(struct socket *so, struct sockaddr *nam, struct thread *td) {
 
@@ -89,18 +98,35 @@ static int repi_sosend(struct socket *so, struct sockaddr *addr, struct uio *uio
 		struct mbuf *control, int flags, struct thread *td) {
 
 	struct mbuf *m;
-	uint32_t *interest;
+	struct repi_header *rh;
+	struct repi_pcb *pcb;
 
 	m = m_uiotombuf(uio, M_WAITOK, 0, max_hdr,
-			(M_PKTHDR | ((flags & MSG_EOR) ? M_EOR : 0)));
+			(M_PKTHDR | ((flags & MSG_EOR) ? M_EOR : 0))); /* TODO: ?????? */
 
 	printf("REPI send %d - %s\n", m->m_hdr.mh_len, m->m_hdr.mh_data);
 
-	/* Appending the interest hash as a second header */
-	M_PREPEND(m, sizeof(uint32_t), M_NOWAIT);
+	pcb = repi_pcb_get(((struct sockaddr_repi *) addr)->interest);
 
-	interest = mtod(m, uint32_t *);
-	*interest = ((struct repi_pcb *)so->so_pcb)->interest_hash;
+	/* Appending and filling the header */
+	M_PREPEND(m, sizeof(struct repi_header), M_NOWAIT);
+	if(m == NULL)
+		return ENOMEM;
+
+	rh = mtod(m, struct repi_header *);
+	bzero(rh, sizeof(struct repi_header));
+
+	rh->version = 1;
+	rh->ttl = 10;
+	rh->hlen = sizeof(struct repi_header);
+	rh->seq_number = arc4random();
+	rh->prefix_dst = repi_ifnet->if_repi_prefix;
+	rh->prefix_src = repi_ifnet->if_repi_prefix;
+	rh->timestamp = time_second;
+	rh->interest = pcb->interest_hash;
+
+	m_clrprotoflags(m);
+
 
 	return(repi_output(NULL /* ifp */, m));
 

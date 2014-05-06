@@ -135,9 +135,7 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 
 	struct sockaddr addr;
 	struct ether_header *eh;
-	struct repi_header *rh;
 	int error = 0;
-	uint32_t interest_hash;
 
 	/* repi_ifnet is asigned by the ioctl command 
 	 * and is the global and uniq interface used by repi
@@ -161,26 +159,6 @@ repi_output(struct ifnet *ifp, struct mbuf *m) {
 		repi_randomize_mac_address(eh->ether_shost);
 	else
 		memcpy(eh->ether_shost, IF_LLADDR(repi_ifnet), ETHER_ADDR_LEN);
-
-	interest_hash = *((uint32_t *) mtod(m, uint32_t *));
-
-	printf("output: %u\n", interest_hash);
-
-	M_PREPEND(m, sizeof(struct repi_header), M_NOWAIT);
-
-	rh = mtod(m, struct repi_header *);
-
-	bzero(rh, sizeof(struct repi_header));
-
-	rh->version = 1;
-	rh->ttl = 10;
-	rh->hlen = sizeof(struct repi_header);
-	rh->seq_number = arc4random();
-	rh->prefix_dst = repi_ifnet->if_repi_prefix;
-	rh->prefix_src = repi_ifnet->if_repi_prefix;
-	rh->timestamp = time_second;
-
-	m_clrprotoflags(m);
 
 	/* Update statistics */
 	counter_u64_add(repi_stats.repi_output_dgrams_count, 1);
@@ -237,6 +215,7 @@ repi_input_internal(struct mbuf *m) {
 	printf("dst prefix: %x\n", repi_hdr->prefix_dst);
 	printf("src prefix: %x\n", repi_hdr->prefix_src);
 	printf("timestamp: %llu\n", repi_hdr->timestamp);
+	printf("interest: %u\n", repi_hdr->interest);
 
 	/* TODO: Implementar o recvfrom aqui */
 
